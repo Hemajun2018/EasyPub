@@ -1,0 +1,355 @@
+{
+  "page": {
+    "show_sections": [
+      "hero",
+
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "stats",
+      "testimonials",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "Write once, publish beautifully on WeChat",
+        "highlight_text": "EasyPub",
+        "description": "Let AI handle formatting so you can focus on writing.",
+        "announcement": null,
+        "tip": "",
+        "buttons": [
+          {
+            "title": "Try for Free",
+            "icon": "Zap",
+            "url": "/pricing",
+            "target": "_self",
+            "variant": "default"
+          }
+        ],
+        "show_avatars": false,
+        "avatars_tip": "999+ creators are using EasyPub",
+        "show_award": false,
+        "image": {
+          "src": "",
+          "alt": "",
+          "width": 1200,
+          "height": 800
+        },
+        "image_invert": {
+          "src": "",
+          "alt": "",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "",
+          "alt": ""
+        }
+      },
+      "logos": {
+        "id": "logos",
+        "title": "ShipAny is built on the shoulders of giants",
+        "items": [
+          {
+            "title": "Next.js",
+            "image": {
+              "src": "/imgs/logos/nextjs.svg",
+              "alt": "Next.js"
+            }
+          },
+          {
+            "title": "React",
+            "image": {
+              "src": "/imgs/logos/react.svg",
+              "alt": "React"
+            }
+          },
+          {
+            "title": "TailwindCSS",
+            "image": {
+              "src": "/imgs/logos/tailwindcss.svg",
+              "alt": "TailwindCSS"
+            }
+          },
+          {
+            "title": "Shadcn/UI",
+            "image": {
+              "src": "/imgs/logos/shadcn.svg",
+              "alt": "Shadcn/UI"
+            }
+          },
+          {
+            "title": "Vercel",
+            "image": {
+              "src": "/imgs/logos/vercel.svg",
+              "alt": "Vercel"
+            }
+          }
+        ]
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "What is EasyPub",
+        "label": "Introduce",
+        "description": "An AI formatter for WeChat Official Accounts that understands your content and rebuilds structure and visuals automatically.",
+        "image": {
+          "src": "/imgs/features/landing-page.png",
+          "alt": "introduce"
+        },
+        "items": [
+          {
+            "title": "Semantic Formatting",
+            "description": "Detects headings, key points, quotes, and data lists. Maps to the right UI blocks automatically.",
+            "icon": "RiMagicLine",
+            "image": {
+              "src": "/imgs/features/1.png",
+              "alt": "introduce"
+            }
+          },
+          {
+            "title": "Pro Style Library",
+            "description": "9 curated styles from tech magazine to minimalist prose – switch with one click.",
+            "icon": "RiPaletteLine",
+            "image": {
+              "src": "/imgs/features/2.png",
+              "alt": "introduce"
+            }
+          },
+          {
+            "title": "WeChat Compatibility",
+            "description": "Strict inline styles to avoid style loss and mobile layout issues.",
+            "icon": "RiWechatLine",
+            "image": {
+              "src": "/imgs/features/3.png",
+              "alt": "introduce"
+            }
+          },
+          {
+            "title": "Mixed Media Handling",
+            "description": "Keeps image anchors, auto-compresses images, and cleans pasted garbage code.",
+            "icon": "RiImage2Line",
+            "image": {
+              "src": "/imgs/features/4.png",
+              "alt": "introduce"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-accordion",
+        "id": "benefits",
+        "title": "Why Choose EasyPub",
+        "label": "Benefits",
+        "description": "Spend time on ideas, not formatting.",
+        "items": [
+          {
+            "title": "Semantic Layout Engine",
+            "description": "Understands structure and intent, then builds headings, quotes, and lists with the right visual hierarchy.",
+            "icon": "RiMagicLine",
+            "image": {
+              "src": "/imgs/features/1.png",
+              "alt": "semantic layout"
+            }
+          },
+          {
+            "title": "Curated Style Library",
+            "description": "9 pro styles—from tech magazine to minimalist prose—switch instantly and keep a unified look.",
+            "icon": "RiPaletteLine",
+            "image": {
+              "src": "/imgs/features/2.png",
+              "alt": "style library"
+            }
+          },
+          {
+            "title": "WeChat-ready Output",
+            "description": "Strict inline styles and image optimization—paste to WeChat and publish without layout loss.",
+            "icon": "RiWechatLine",
+            "image": {
+              "src": "/imgs/features/3.png",
+              "alt": "wechat compatible"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "3 steps to publish",
+        "description": "From draft to WeChat-ready HTML in minutes:",
+        "image": {
+          "src": "/imgs/features/1.png",
+          "alt": "usage"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "Input/Paste Content",
+            "description": "Type directly or paste from Word/Notion/Markdown. We clean up the mess.",
+            "image": {
+              "src": "/imgs/features/5.png",
+              "alt": "usage"
+            }
+          },
+          {
+            "title": "Pick a Style",
+            "description": "Switch across 9 styles and preview instantly.",
+            "image": {
+              "src": "/imgs/features/6.png",
+              "alt": "usage"
+            }
+          },
+          {
+            "title": "AI Format in One Click",
+            "description": "Semantic restructuring with polished inline styles.",
+            "image": {
+              "src": "/imgs/features/7.png",
+              "alt": "usage"
+            }
+          },
+          {
+            "title": "Copy to WeChat",
+            "description": "Images are optimized and encoded. Paste and publish.",
+            "image": {
+              "src": "/imgs/features/8.png",
+              "alt": "usage"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "features": {
+        "id": "features",
+        "title": "Core Capabilities",
+        "description": "Semantic AI × Style Library × Mixed Media × WeChat-compatible inline styles",
+        "items": [
+          {"title": "Semantic Understanding", "description": "Detects headings, key points, quotes, and data lists.", "icon": "RiMagicLine"},
+          {"title": "Style Library", "description": "9 curated styles from tech magazine to minimalist prose.", "icon": "RiPaletteLine"},
+          {"title": "Mixed Media", "description": "Keeps image anchors, compresses images, cleans pasted code.", "icon": "RiImage2Line"},
+          {"title": "WeChat Compatible", "description": "Strict inline styles so pasted HTML stays intact.", "icon": "RiWechatLine"}
+        ]
+      },
+      "stats": {
+        "id": "stats",
+        "title": "Create faster",
+        "description": "Let AI handle aesthetics. You focus on ideas.",
+        "items": [
+          {"title": "10x", "description": "Faster formatting"},
+          {"title": "90%", "description": "Less manual tweaks"},
+          {"title": "100%", "description": "WeChat editor friendly"}
+        ],
+        "className": "bg-muted"
+      },
+      "testimonials": {
+        "id": "testimonials",
+        "title": "What Users Say",
+        "description": "From creators and editors using EasyPub daily.",
+        "items": [
+          {
+            "name": "Sophie Lin",
+            "role": "Tech newsletter writer",
+            "quote": "Formatting used to take an hour. Now it’s ten minutes, and the structure is cleaner.",
+            "image": {
+              "src": "/imgs/avatars/1.png",
+              "alt": "sophie"
+            }
+          },
+          {
+            "name": "Evan Chen",
+            "role": "Content operator",
+            "quote": "Pasting from Notion just works. Image anchors are preserved and the output looks polished.",
+            "image": {
+              "src": "/imgs/avatars/2.png",
+              "alt": "evan"
+            }
+          },
+          {
+            "name": "Ava Zhou",
+            "role": "Editor",
+            "quote": "The style presets save tons of coordination time across columns and writers.",
+            "image": {
+              "src": "/imgs/avatars/3.png",
+              "alt": "ava"
+            }
+          },
+          {
+            "name": "Maya Xie",
+            "role": "Brand strategist",
+            "quote": "Quotes, data cards, and highlights come out beautifully without manual tweaks.",
+            "image": {
+              "src": "/imgs/avatars/4.png",
+              "alt": "maya"
+            }
+          },
+          {
+            "name": "Leo Guo",
+            "role": "Education creator",
+            "quote": "Copying to WeChat is nearly zero rework. Mobile display stays consistent.",
+            "image": {
+              "src": "/imgs/avatars/5.png",
+              "alt": "leo"
+            }
+          },
+          {
+            "name": "Nina Wang",
+            "role": "Creator",
+            "quote": "Write, format, publish. It finally feels like one flow.",
+            "image": {
+              "src": "/imgs/avatars/6.png",
+              "alt": "nina"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Frequently Asked Questions",
+        "description": "More questions? Contact us.",
+        "items": [
+          {"question": "How does EasyPub ensure WeChat compatibility?", "answer": "We generate strict inline styles and adapt for common mobile layouts to avoid style loss after pasting."},
+          {"question": "Can I paste from Word/Notion/Markdown?", "answer": "Yes. We clean messy pasted code and preserve image anchors and structure."},
+          {"question": "Can I customize the visual style?", "answer": "Choose from 9 curated styles and fine-tune headings, quotes, and lists."},
+          {"question": "Can I still edit after generation?", "answer": "Absolutely. EasyPub outputs standard HTML you can tweak before pasting."},
+          {"question": "How are images handled?", "answer": "We auto-compress images and keep them WeChat-safe for stable rendering."},
+          {"question": "What languages are supported?", "answer": "English and Chinese UIs are available."}
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Start creating faster now",
+        "description": "EasyPub: let AI handle formatting while you write.",
+        "buttons": [
+          {"title": "Try for Free", "url": "/pricing", "target": "_self", "icon": "Zap"},
+          {
+            "title": "Read Document",
+            "url": "/docs",
+            "target": "_blank",
+            "variant": "outline",
+            "icon": "BookOpenText"
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "subscribe": {
+        "id": "subscribe",
+        "title": "Subscribe to our newsletter",
+        "description": "Get EasyPub updates and formatting tips.",
+        "submit": {
+          "input": {
+            "placeholder": "Enter your email"
+          },
+          "button": {
+            "title": "Subscribe"
+          },
+          "action": "/api/subscribe"
+        },
+        "className": "bg-muted"
+      }
+    }
+  }
+}

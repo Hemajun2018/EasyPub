@@ -1,0 +1,365 @@
+{
+  "page": {
+    "show_sections": [
+      "hero",
+
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "stats",
+      "testimonials",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI 公众号排版器\n一键排版，把时间还给创作",
+        "description": "把排版时间交给 AI，你只需要专注内容。",
+        "announcement": null,
+        "tip": "",
+        "buttons": [
+          {
+            "title": "免费试用",
+            "icon": "Zap",
+            "url": "/pricing",
+            "target": "_self",
+            "variant": "default"
+          }
+        ],
+        "show_avatars": false,
+        "avatars_tip": "999+ 创作者正在使用 EasyPub",
+        "show_award": false,
+        "image": {
+          "src": "",
+          "alt": "",
+          "width": 1200,
+          "height": 800
+        },
+        "image_invert": {
+          "src": "",
+          "alt": "",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "",
+          "alt": ""
+        }
+      },
+      "logos": {
+        "title": "ShipAny 使用以下技术栈构建",
+        "items": [
+          {
+            "title": "Next.js",
+            "image": {
+              "src": "/imgs/logos/nextjs.svg",
+              "alt": "Next.js"
+            }
+          },
+          {
+            "title": "React",
+            "image": {
+              "src": "/imgs/logos/react.svg",
+              "alt": "React"
+            }
+          },
+          {
+            "title": "TailwindCSS",
+            "image": {
+              "src": "/imgs/logos/tailwindcss.svg",
+              "alt": "TailwindCSS"
+            }
+          },
+          {
+            "title": "Shadcn/UI",
+            "image": {
+              "src": "/imgs/logos/shadcn.svg",
+              "alt": "Shadcn/UI"
+            }
+          },
+          {
+            "title": "Vercel",
+            "image": {
+              "src": "/imgs/logos/vercel.svg",
+              "alt": "Vercel"
+            }
+          }
+        ]
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "EasyPub 是什么？",
+        "label": "产品简介",
+        "description": "一款为微信公众号创作者打造的 AI 智能排版工具。理解你的每一段话，自动重塑结构与视觉。",
+        "image": {
+          "src": "/imgs/features/landing-page.png",
+          "alt": "introduce"
+        },
+        "items": [
+          {
+            "title": "语义级排版",
+            "description": "识别标题、要点、引用、数据列表等语义单元，自动匹配组件样式。",
+            "icon": "RiMagicLine",
+            "image": {
+              "src": "/imgs/features/1.png",
+              "alt": "introduce"
+            }
+          },
+          {
+            "title": "大师级风格库",
+            "description": "内置 9 种专业风格，一键切换，满足从深度特稿到极简散文的所有场景。",
+            "icon": "RiPaletteLine",
+            "image": {
+              "src": "/imgs/features/2.png",
+              "alt": "introduce"
+            }
+          },
+          {
+            "title": "完美兼容微信",
+            "description": "严格内联样式，解决复制后丢样、移动端错位等痛点，复制即用。",
+            "icon": "RiWechatLine",
+            "image": {
+              "src": "/imgs/features/3.png",
+              "alt": "introduce"
+            }
+          },
+          {
+            "title": "图文混排增强",
+            "description": "识别图片锚点、自动压缩、清除粘贴垃圾代码，提升兼容性。",
+            "icon": "RiImage2Line",
+            "image": {
+              "src": "/imgs/features/4.png",
+              "alt": "introduce"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-accordion",
+        "id": "benefits",
+        "title": "为何选择 EasyPub",
+        "label": "产品优势",
+        "description": "让创作者把时间花在内容上，而不是排版上。",
+        "items": [
+          {
+            "title": "语义级排版引擎",
+            "description": "理解段落结构与语义要点，自动生成标题、引用与列表的最佳视觉层级。",
+            "icon": "RiMagicLine",
+            "image": {
+              "src": "/imgs/features/1.png",
+              "alt": "语义排版"
+            }
+          },
+          {
+            "title": "大师级风格库",
+            "description": "科技杂志、极简禅意、深蓝简报等 9 种风格，一键切换，统一视觉语言。",
+            "icon": "RiPaletteLine",
+            "image": {
+              "src": "/imgs/features/2.png",
+              "alt": "风格库"
+            }
+          },
+          {
+            "title": "微信后台完美兼容",
+            "description": "严格内联样式与图片优化，复制到公众号后台不丢样、不乱序。",
+            "icon": "RiWechatLine",
+            "image": {
+              "src": "/imgs/features/3.png",
+              "alt": "微信兼容"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "3 步完成排版",
+        "description": "从草稿到成稿，只需三步：",
+        "image": {
+          "src": "/imgs/features/1.png",
+          "alt": "usage"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "输入/粘贴内容",
+            "description": "直接输入或从 Word、Notion、Markdown 粘贴，自动清理冗余。",
+            "image": {
+              "src": "/imgs/features/5.png",
+              "alt": "usage"
+            }
+          },
+          {
+            "title": "选择风格",
+            "description": "从 9 种专业风格中一键切换，实时预览效果。",
+            "image": {
+              "src": "/imgs/features/6.png",
+              "alt": "usage"
+            }
+          },
+          {
+            "title": "一键 AI 排版",
+            "description": "语义级重排结构，自动生成内联样式的精美图文。",
+            "image": {
+              "src": "/imgs/features/7.png",
+              "alt": "usage"
+            }
+          },
+          {
+            "title": "复制到公众号",
+            "description": "图片自动处理为合适体积与编码，粘贴即用。",
+            "image": {
+              "src": "/imgs/features/8.png",
+              "alt": "usage"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "features": {
+        "id": "features",
+        "title": "核心能力",
+        "description": "AI 语义理解 × 风格库 × 图文混排增强 × 微信兼容",
+        "items": [
+          {"title": "AI 语义理解", "description": "识别章节标题、引用金句、数据列表等语义结构。", "icon": "RiMagicLine"},
+          {"title": "风格库一键切换", "description": "科技杂志、极简禅意、深蓝简报、罗辑思维、量子位等 9 种风格。", "icon": "RiPaletteLine"},
+          {"title": "图文混排增强", "description": "保留图片锚点、自动压缩、清除粘贴垃圾代码。", "icon": "RiImage2Line"},
+          {"title": "微信后台兼容", "description": "严格内联样式（Inline Styles），复制粘贴不丢样。", "icon": "RiWechatLine"}
+        ]
+      },
+      "stats": {
+        "id": "stats",
+        "title": "创作提效",
+        "description": "把审美交给 AI，把时间还给自己。",
+        "items": [
+          {"title": "10x", "description": "排版效率提升"},
+          {"title": "90%", "description": "手动调整减少"},
+          {"title": "100%", "description": "微信编辑器兼容"}
+        ],
+        "className": "bg-muted"
+      },
+      "testimonials": {
+        "id": "testimonials",
+        "title": "用户评价",
+        "description": "来自公众号作者与编辑的日常使用反馈。",
+        "items": [
+          {
+            "name": "林一",
+            "role": "科技号作者",
+            "quote": "以前排版至少一小时，现在十分钟搞定，结构感和重点都更清晰。",
+            "image": {
+              "src": "/imgs/avatars/1.png",
+              "alt": "lin"
+            }
+          },
+          {
+            "name": "陈雨",
+            "role": "内容运营",
+            "quote": "从 Notion 直接粘贴就能出稿，图片锚点没丢，排版质感很稳定。",
+            "image": {
+              "src": "/imgs/avatars/2.png",
+              "alt": "chen"
+            }
+          },
+          {
+            "name": "周然",
+            "role": "新媒体编辑",
+            "quote": "风格库切换很方便，适配不同栏目气质，减少了统一风格的沟通成本。",
+            "image": {
+              "src": "/imgs/avatars/3.png",
+              "alt": "zhou"
+            }
+          },
+          {
+            "name": "谢敏",
+            "role": "品牌策划",
+            "quote": "卡片、引用、数据块自动排得很漂亮，读者停留时间明显更长。",
+            "image": {
+              "src": "/imgs/avatars/4.png",
+              "alt": "xie"
+            }
+          },
+          {
+            "name": "郭哲",
+            "role": "教育号运营",
+            "quote": "复制到公众号后台几乎零返工，移动端显示也很稳定。",
+            "image": {
+              "src": "/imgs/avatars/5.png",
+              "alt": "guo"
+            }
+          },
+          {
+            "name": "王珂",
+            "role": "创作者",
+            "quote": "写完就能发，真正把时间还给内容创作。",
+            "image": {
+              "src": "/imgs/avatars/6.png",
+              "alt": "wang"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "EasyPub 常见问题",
+        "description": "还有问题？欢迎联系我们。",
+        "items": [
+          {
+            "question": "EasyPub 如何保证微信后台兼容？",
+            "answer": "输出严格内联样式，并对常见组件与移动端布局进行适配，复制后不丢样。"
+          },
+          {
+            "question": "能从 Word/Notion/Markdown 直接粘贴吗？",
+            "answer": "可以。系统会自动清理冗余代码，并保留图片锚点与段落结构。"
+          },
+          {
+            "question": "可以自定义视觉风格吗？",
+            "answer": "内置 9 种风格可一键切换，也可在生成后微调标题、引用与列表样式。"
+          },
+          {
+            "question": "生成后还能手动修改吗？",
+            "answer": "当然可以。EasyPub 输出标准 HTML，可再做细节微调。"
+          },
+          {
+            "question": "图片如何处理？",
+            "answer": "系统会自动压缩并优化体积，确保复制到公众号后台仍然清晰且加载稳定。"
+          },
+          {
+            "question": "支持哪些语言与内容类型？",
+            "answer": "目前支持中英文界面，适用于资讯、长文、教程与图文混排等内容。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "现在就开始更高效的创作",
+        "description": "EasyPub：让内容创作回归内容本身。",
+        "buttons": [
+          { "title": "免费试用", "url": "/pricing", "target": "_self", "icon": "Zap" },
+          { "title": "产品文档", "url": "/docs", "target": "_blank", "variant": "outline", "icon": "BookOpenText" }
+        ],
+        "className": "bg-muted"
+      },
+      "subscribe": {
+        "id": "subscribe",
+        "title": "订阅我们的邮件通知",
+        "description": "获取 EasyPub 的最新功能与排版技巧更新。",
+        "submit": {
+          "input": {
+            "placeholder": "输入邮箱"
+          },
+          "button": {
+            "title": "订阅"
+          },
+          "action": "/api/subscribe"
+        },
+        "className": "bg-muted"
+      }
+    }
+  }
+}
