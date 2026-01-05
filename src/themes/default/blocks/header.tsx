@@ -95,7 +95,7 @@ export function Header({ header }: { header: HeaderType }) {
                     href={item.url || ''}
                     target={item.target || '_self'}
                     className={cn(
-                      'flex items-center gap-2 rounded-full px-4 py-2 transition hover:bg-white/70 hover:text-foreground',
+                      'flex flex-row items-center gap-2 rounded-full px-4 py-2 transition hover:bg-white/70 hover:text-foreground',
                       item.is_active || pathname.endsWith(item.url as string)
                         ? 'bg-white/80 text-foreground shadow-sm ring-1 ring-black/5'
                         : ''
