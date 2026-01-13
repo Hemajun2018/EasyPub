@@ -19,7 +19,7 @@
       ]
     },
     "buttons": [
-      { "title": "Try for Free", "url": "/pricing", "icon": "Zap" }
+      { "title": "Try for Free", "url": "/formatter", "icon": "Zap" }
     ],
     "user_nav": {
       "show_name": true,
@@ -39,8 +39,8 @@
       ]
     },
     "show_sign": false,
-    "show_theme": true,
-    "show_locale": true,
+    "show_theme": false,
+    "show_locale": false,
     "topbanner": { "text": "" }
   },
   "footer": {
@@ -160,7 +160,8 @@
         }
       ]
     },
-    "show_theme": true,
-    "show_locale": true
+    "show_theme": false,
+    "show_locale": false,
+    "show_built_with": false
   }
 }

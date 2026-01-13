@@ -16,10 +16,6 @@ const zh: Partial<Translations> = {
 // make sure `locale` is consistent with your i18n config
 const locales = [
   {
-    name: 'English',
-    locale: 'en',
-  },
-  {
     name: '简体中文',
     locale: 'zh',
   },
@@ -33,7 +29,7 @@ export default async function DocsRootLayout({
   params: Promise<{ locale?: string }>;
 }) {
   const { locale } = await params;
-  const lang = locale || 'en';
+  const lang = locale || 'zh';
 
   return (
     <RootProvider

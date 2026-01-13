@@ -24,7 +24,7 @@
           {
             "title": "Try for Free",
             "icon": "Zap",
-            "url": "/pricing",
+            "url": "/formatter",
             "target": "_self",
             "variant": "default"
           }
@@ -324,7 +324,7 @@
         "title": "Start creating faster now",
         "description": "EasyPub: let AI handle formatting while you write.",
         "buttons": [
-          {"title": "Try for Free", "url": "/pricing", "target": "_self", "icon": "Zap"},
+          {"title": "Try for Free", "url": "/formatter", "target": "_self", "icon": "Zap"},
           {
             "title": "Read Document",
             "url": "/docs",

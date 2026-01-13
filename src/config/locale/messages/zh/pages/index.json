@@ -15,7 +15,7 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "AI 公众号排版器\n一键排版，把时间还给创作",
+        "title": "公众号AI排版器\n一键排版，把时间还给创作",
         "description": "把排版时间交给 AI，你只需要专注内容。",
         "announcement": null,
         "tip": "",
@@ -23,7 +23,7 @@
           {
             "title": "免费试用",
             "icon": "Zap",
-            "url": "/pricing",
+            "url": "/formatter",
             "target": "_self",
             "variant": "default"
           }
@@ -340,7 +340,7 @@
         "title": "现在就开始更高效的创作",
         "description": "EasyPub：让内容创作回归内容本身。",
         "buttons": [
-          { "title": "免费试用", "url": "/pricing", "target": "_self", "icon": "Zap" },
+          { "title": "免费试用", "url": "/formatter", "target": "_self", "icon": "Zap" },
           { "title": "产品文档", "url": "/docs", "target": "_blank", "variant": "outline", "icon": "BookOpenText" }
         ],
         "className": "bg-muted"

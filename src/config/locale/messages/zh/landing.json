@@ -19,7 +19,7 @@
       ]
     },
     "buttons": [
-      { "title": "免费试用", "url": "/pricing", "icon": "Zap" }
+      { "title": "免费试用", "url": "/formatter", "icon": "Zap" }
     ],
     "user_nav": {
       "show_name": true,
@@ -39,8 +39,8 @@
       ]
     },
     "show_sign": false,
-    "show_theme": true,
-    "show_locale": true,
+    "show_theme": false,
+    "show_locale": false,
     "topbanner": { "text": "" }
   },
   "footer": {
@@ -69,7 +69,8 @@
         }
       ]
     },
-    "show_theme": true,
-    "show_locale": true
+    "show_theme": false,
+    "show_locale": false,
+    "show_built_with": false
   }
 }
