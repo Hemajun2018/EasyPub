@@ -45,8 +45,8 @@
           "height": 800
         },
         "background_image": {
-          "src": "",
-          "alt": ""
+          "src": "/imgs/bg/1.png",
+          "alt": "hero background"
         }
       },
       "logos": {
@@ -324,14 +324,7 @@
         "title": "Start creating faster now",
         "description": "EasyPub: let AI handle formatting while you write.",
         "buttons": [
-          {"title": "Try for Free", "url": "/formatter", "target": "_self", "icon": "Zap"},
-          {
-            "title": "Read Document",
-            "url": "/docs",
-            "target": "_blank",
-            "variant": "outline",
-            "icon": "BookOpenText"
-          }
+          {"title": "Try for Free", "url": "/formatter", "target": "_self", "icon": "Zap"}
         ],
         "className": "bg-muted"
       },

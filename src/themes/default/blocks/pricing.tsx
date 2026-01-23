@@ -429,7 +429,7 @@ export function Pricing({
                       >
                         <SelectTrigger
                           size="sm"
-                          className="border-muted-foreground/30 bg-background/50 h-6 min-w-[60px] px-2 text-xs"
+                          className="border-border bg-background/50 h-6 min-w-[60px] px-2 text-xs"
                         >
                           <SelectValue placeholder="Currency" />
                         </SelectTrigger>
@@ -474,7 +474,7 @@ export function Pricing({
                       className={cn(
                         'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
                         'mt-4 h-9 w-full px-4 py-2',
-                        'bg-primary text-primary-foreground hover:bg-primary/90 border-[0.5px] border-white/25 shadow-md shadow-black/20'
+                        'bg-primary text-primary-foreground hover:opacity-90 border-[0.5px] border-primary-foreground/25 shadow-md shadow-primary/20'
                       )}
                     >
                       {isLoading && item.product_id === productId ? (

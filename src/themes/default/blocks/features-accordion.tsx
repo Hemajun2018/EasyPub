@@ -67,7 +67,7 @@ export function FeaturesAccordion({
                 <AccordionItem
                   value={`item-${idx + 1}`}
                   key={idx}
-                  className="rounded-2xl border border-black/10 bg-white/70 px-5 py-1 shadow-sm shadow-black/5"
+                  className="rounded-2xl border border-border bg-card/70 px-5 py-1 shadow-sm shadow-black/5"
                 >
                   <AccordionTrigger className="text-left text-base font-medium hover:no-underline">
                     <div className="flex items-center gap-2">
@@ -87,8 +87,8 @@ export function FeaturesAccordion({
 
           <ScrollAnimation delay={0.2} direction="right">
             {/* min-w-0/flex-shrink to prevent overflow */}
-            <div className="relative flex min-w-0 flex-shrink overflow-hidden rounded-[2rem] border border-black/10 bg-white/70 p-3 shadow-2xl shadow-black/10 backdrop-blur">
-              <div className="absolute inset-0 right-0 ml-auto w-16 border-l border-black/10 bg-[repeating-linear-gradient(-45deg,rgba(15,23,42,0.08),rgba(15,23,42,0.08)_1px,transparent_1px,transparent_8px)]" />
+            <div className="relative flex min-w-0 flex-shrink overflow-hidden rounded-[2rem] border border-border bg-card/70 p-3 shadow-2xl shadow-black/10 backdrop-blur">
+              <div className="absolute inset-0 right-0 ml-auto w-16 border-l border-border bg-[repeating-linear-gradient(-45deg,var(--color-muted),var(--color-muted)_1px,transparent_1px,transparent_8px)]" />
               <div className="relative aspect-76/59 w-full min-w-0 rounded-[1.6rem] sm:w-[calc(3/4*100%+3rem)]">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -97,7 +97,7 @@ export function FeaturesAccordion({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: 0.2 }}
-                    className="size-full overflow-hidden rounded-[1.4rem] border border-black/10 shadow-lg shadow-black/10"
+                    className="size-full overflow-hidden rounded-[1.4rem] border border-border shadow-lg shadow-black/10"
                   >
                     <LazyImage
                       src={images[activeItem].image}
@@ -110,7 +110,7 @@ export function FeaturesAccordion({
               <BorderBeam
                 duration={6}
                 size={200}
-                className="from-transparent via-amber-400/60 to-transparent"
+                className="from-transparent via-primary/60 to-transparent"
               />
             </div>
           </ScrollAnimation>

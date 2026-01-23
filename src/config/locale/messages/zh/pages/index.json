@@ -44,8 +44,8 @@
           "height": 800
         },
         "background_image": {
-          "src": "",
-          "alt": ""
+          "src": "/imgs/bg/1.png",
+          "alt": "hero background"
         }
       },
       "logos": {
@@ -340,8 +340,7 @@
         "title": "现在就开始更高效的创作",
         "description": "EasyPub：让内容创作回归内容本身。",
         "buttons": [
-          { "title": "免费试用", "url": "/formatter", "target": "_self", "icon": "Zap" },
-          { "title": "产品文档", "url": "/docs", "target": "_blank", "variant": "outline", "icon": "BookOpenText" }
+          { "title": "免费试用", "url": "/formatter", "target": "_self", "icon": "Zap" }
         ],
         "className": "bg-muted"
       },

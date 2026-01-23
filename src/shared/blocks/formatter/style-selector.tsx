@@ -17,22 +17,22 @@ export function StyleSelector({
           onClick={() => onSelect(option.id)}
           className={`relative rounded-lg border p-4 text-left transition-all duration-200 ${
             selected === option.id
-              ? 'border-[#1a1a1a] bg-[#f5f2eb] shadow-md ring-1 ring-[#1a1a1a]'
-              : 'border-gray-200 bg-white hover:border-gray-400 hover:shadow-sm'
+              ? 'border-primary bg-accent/50 shadow-md ring-1 ring-primary'
+              : 'border-border bg-card hover:border-border/80 hover:shadow-sm'
           }`}
           type="button"
         >
           <div className="mb-1 flex items-center justify-between">
             <h3
               className={`font-serif text-sm font-bold ${
-                selected === option.id ? 'text-[#1a1a1a]' : 'text-gray-700'
+                selected === option.id ? 'text-primary' : 'text-foreground'
               }`}
             >
               {option.name}
             </h3>
             <div className={`h-3 w-3 rounded-full ${option.previewColor}`} />
           </div>
-          <p className="text-xs leading-relaxed text-gray-500">
+          <p className="text-xs leading-relaxed text-muted-foreground">
             {option.description}
           </p>
         </button>

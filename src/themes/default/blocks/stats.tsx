@@ -31,7 +31,7 @@ export function Stats({
           <div className="grid gap-4 md:grid-cols-3">
             {section.items?.map((item, idx) => (
               <div
-                className="space-y-4 rounded-2xl border border-black/10 bg-white/75 p-6 text-center shadow-sm shadow-black/5"
+                className="space-y-4 rounded-2xl border border-border bg-card p-6 text-center shadow-sm shadow-black/5"
                 key={idx}
               >
                 <h3 className="sr-only">

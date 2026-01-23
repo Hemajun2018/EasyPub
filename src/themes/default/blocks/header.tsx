@@ -95,9 +95,9 @@ export function Header({ header }: { header: HeaderType }) {
                     href={item.url || ''}
                     target={item.target || '_self'}
                     className={cn(
-                      'flex flex-row items-center gap-2 rounded-full px-4 py-2 transition hover:bg-white/70 hover:text-foreground',
+                      'flex flex-row items-center gap-2 rounded-full px-4 py-2 transition hover:bg-accent/70 hover:text-accent-foreground',
                       item.is_active || pathname.endsWith(item.url as string)
-                        ? 'bg-white/80 text-foreground shadow-sm ring-1 ring-black/5'
+                        ? 'bg-accent/80 text-accent-foreground shadow-sm ring-1 ring-border shadow-black/5'
                         : ''
                     )}
                   >
@@ -110,14 +110,14 @@ export function Header({ header }: { header: HeaderType }) {
 
             return (
               <NavigationMenuItem key={idx}>
-                <NavigationMenuTrigger className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground/70 transition hover:bg-white/70 hover:text-foreground">
+                <NavigationMenuTrigger className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground/70 transition hover:bg-accent/70 hover:text-accent-foreground">
                   {item.icon && (
                     <SmartIcon name={item.icon as string} className="h-4 w-4" />
                   )}
                   {item.title}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="min-w-2xs origin-top p-0.5">
-                  <div className="border-black/5 bg-white/90 rounded-2xl border p-2 shadow-xl shadow-black/10 backdrop-blur">
+                  <div className="border-border bg-card/90 rounded-2xl border p-2 shadow-xl shadow-black/10 backdrop-blur">
                     <ul className="mt-1 space-y-2">
                       {item.children?.map((subItem: NavItem, index: number) => (
                         <ListItem
@@ -255,9 +255,9 @@ export function Header({ header }: { header: HeaderType }) {
         <div
           className={cn(
             'absolute inset-x-0 top-0 z-50 h-18 border-transparent transition-all duration-300',
-            'in-data-scrolled:border-black/5 in-data-scrolled:bg-white/70 in-data-scrolled:border-b in-data-scrolled:backdrop-blur in-data-scrolled:shadow-sm',
-            'has-data-[state=open]:bg-white/80 has-data-[state=open]:h-[calc(var(--navigation-menu-viewport-height)+3.4rem)] has-data-[state=open]:border-b has-data-[state=open]:shadow-xl has-data-[state=open]:shadow-black/10 has-data-[state=open]:backdrop-blur',
-            'max-lg:in-data-[state=active]:bg-white/85 max-lg:h-14 max-lg:overflow-hidden max-lg:border-b max-lg:in-data-[state=active]:h-screen max-lg:in-data-[state=active]:backdrop-blur'
+            'in-data-scrolled:border-border in-data-scrolled:bg-card/70 in-data-scrolled:border-b in-data-scrolled:backdrop-blur in-data-scrolled:shadow-sm',
+            'has-data-[state=open]:bg-card/80 has-data-[state=open]:h-[calc(var(--navigation-menu-viewport-height)+3.4rem)] has-data-[state=open]:border-b has-data-[state=open]:shadow-xl has-data-[state=open]:shadow-black/10 has-data-[state=open]:backdrop-blur',
+            'max-lg:in-data-[state=active]:bg-card/85 max-lg:h-14 max-lg:overflow-hidden max-lg:border-b max-lg:in-data-[state=active]:h-screen max-lg:in-data-[state=active]:backdrop-blur'
           )}
         >
           <div className="container">
@@ -297,10 +297,10 @@ export function Header({ header }: { header: HeaderType }) {
                         target={button.target || '_self'}
                         className={cn(
                           'inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium whitespace-nowrap transition',
-                          'h-9 px-4 shadow-sm ring-1 ring-black/5',
+                          'h-9 px-4 shadow-sm ring-1 ring-border shadow-black/5',
                           button.variant === 'outline'
-                            ? 'bg-white/80 text-foreground hover:bg-white'
-                            : 'bg-black text-white shadow-lg shadow-black/20 hover:bg-black/90'
+                            ? 'bg-card/80 text-foreground hover:bg-card'
+                            : 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90'
                         )}
                       >
                         {button.icon && (

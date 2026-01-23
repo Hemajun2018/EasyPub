@@ -1045,9 +1045,9 @@ const App = () => {
   }
 
   return (
-    <div className="bg-[var(--background-primary,#f5f5f7)] text-[var(--text-charcoal,#333)] h-screen w-full flex flex-col overflow-hidden">
+    <div className="bg-background text-foreground h-screen w-full flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-[var(--border-color,#e5e7eb)] px-6 py-3 shrink-0 bg-white">
+      <header className="flex items-center justify-between border-b border-border px-6 py-3 shrink-0 bg-card">
         <Link href="/" className="flex items-center gap-3 hover:opacity-90">
           <img src="/logo.png" alt="EasyPub Logo" className="w-6 h-6 object-contain" />
           <h1 className="text-lg font-bold tracking-tight">EasyPub</h1>
@@ -1079,12 +1079,12 @@ const App = () => {
       {/* Main Grid */}
       <main className="flex-1 grid grid-cols-12 gap-6 p-6 overflow-hidden">
         {/* Left: Input */}
-        <section className="col-span-12 md:col-span-4 flex flex-col h-full bg-white rounded-xl border border-[var(--border-color,#e5e7eb)]">
+        <section className="col-span-12 md:col-span-4 flex flex-col h-full bg-card rounded-xl border border-border">
           <div className="flex flex-col p-4 flex-1">
             <label className="flex flex-col flex-1 h-full">
               <p className="text-base font-medium pb-3">在此处粘贴您的文章内容...</p>
               <textarea
-                className="form-input flex w-full flex-1 resize-none overflow-auto rounded-lg focus:outline-0 focus:ring-0 border border-[var(--border-color,#e5e7eb)] bg-[var(--background-primary,#f5f5f7)] focus:border-[var(--accent-color,#5c7c68)] placeholder:text-gray-400 p-4 text-base leading-relaxed custom-scrollbar"
+                className="form-input flex w-full flex-1 resize-none overflow-auto rounded-lg focus:outline-0 focus:ring-0 border border-border bg-background focus:border-primary placeholder:text-muted-foreground p-4 text-base leading-relaxed custom-scrollbar"
                 placeholder="开始你的创作之旅，将文字粘贴于此，让AI赋予它新的生命。"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
@@ -1101,13 +1101,13 @@ const App = () => {
         </section>
 
         {/* Middle: Style Picker */}
-        <section className="col-span-12 md:col-span-3 flex flex-col h-full bg-white rounded-xl border border-[var(--border-color,#e5e7eb)] overflow-hidden">
-          <div className="p-4 border-b border-[var(--border-color,#e5e7eb)]"><h3 className="text-lg font-bold">选择一个风格</h3></div>
+        <section className="col-span-12 md:col-span-3 flex flex-col h-full bg-card rounded-xl border border-border overflow-hidden">
+          <div className="p-4 border-b border-border"><h3 className="text-lg font-bold">选择一个风格</h3></div>
           <div className="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-6">
             <div>
               <StyleSelector selected={selectedStyle} onSelect={(s) => { setSelectedStyle(s); }} />
             </div>
-            <div className="pt-2 border-t border-[var(--border-color,#e5e7eb)]">
+            <div className="pt-2 border-t border-border">
               <h4 className="text-base font-bold mb-2">定制模板（指令）</h4>
               <div className="space-y-2">
                 <input value={createTplUrl} onChange={(e) => setCreateTplUrl(e.target.value)} className="w-full border rounded px-2 py-1 text-sm" placeholder="粘贴微信公众号文章链接" />
@@ -1126,13 +1126,13 @@ const App = () => {
                     <div className="text-xs text-gray-500 mb-1">我的模板</div>
                     <div className="space-y-1">
                       {customTemplates.map(t => (
-                        <div key={t.id} className={`flex items-center justify-between border rounded px-2 py-1 ${selectedTemplateId === t.id ? 'border-[#1a1a1a] bg-[#f5f2eb]' : 'border-gray-200'}`}>
+                        <div key={t.id} className={`flex items-center justify-between border rounded px-2 py-1 ${selectedTemplateId === t.id ? 'border-primary bg-accent/50' : 'border-border'}`}>
                           <button className="text-left text-sm truncate flex-1" onClick={() => setSelectedTemplateId(selectedTemplateId === t.id ? '' : t.id)}>
                             {selectedTemplateId === t.id ? '✅ ' : ''}{t.name}
                           </button>
                           <div className="flex items-center gap-2">
-                            <button className="text-xs text-blue-500 hover:underline" title="查看提示词" onClick={() => openViewTemplatePrompt(t.id)}>查看</button>
-                            <button className="text-xs text-gray-400 hover:text-red-500" title="删除" onClick={() => { templateStore.remove(t.id); setCustomTemplates(templateStore.list()); if (selectedTemplateId === t.id) setSelectedTemplateId(''); }}>删除</button>
+                            <button className="text-xs text-primary hover:underline" title="查看提示词" onClick={() => openViewTemplatePrompt(t.id)}>查看</button>
+                            <button className="text-xs text-muted-foreground hover:text-destructive" title="删除" onClick={() => { templateStore.remove(t.id); setCustomTemplates(templateStore.list()); if (selectedTemplateId === t.id) setSelectedTemplateId(''); }}>删除</button>
                           </div>
                         </div>
                       ))}
@@ -1150,40 +1150,40 @@ const App = () => {
             </div>
           </div>
           <div className="p-4 mt-auto">
-            <FormatterButton onClick={handleFormat} isLoading={isFormatting} className="flex w-full h-12 !rounded-lg !bg-[var(--accent-color,#5c7c68)] hover:!bg-[var(--accent-color,#5c7c68)]/90 font-bold">
+            <FormatterButton onClick={handleFormat} isLoading={isFormatting} className="flex w-full h-12 !rounded-lg font-bold">
               一键AI排版
             </FormatterButton>
             {selectedTemplateId && (
-              <p className="mt-2 text-xs text-gray-500">将使用定制模板「{customTemplates.find(x => x.id === selectedTemplateId)?.name || ''}」进行排版。</p>
+              <p className="mt-2 text-xs text-muted-foreground">将使用定制模板「{customTemplates.find(x => x.id === selectedTemplateId)?.name || ''}」进行排版。</p>
             )}
           </div>
         </section>
 
         {/* Right: Preview */}
-        <section className="col-span-12 md:col-span-5 flex flex-col h-full bg-white rounded-xl border border-[var(--border-color,#e5e7eb)] overflow-hidden">
-          <div className="flex items-center justify-between p-4 border-b border-[var(--border-color,#e5e7eb)]">
+        <section className="col-span-12 md:col-span-5 flex flex-col h-full bg-card rounded-xl border border-border overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-border">
             <h3 className="text-lg font-bold">排版预览</h3>
             <FormatterButton
               variant="secondary"
               onClick={handleCopyToWeChat}
               disabled={!formattedHtml}
-              className="!h-10 !rounded-lg !bg-[var(--background-primary,#f5f5f7)] hover:!bg-[var(--border-color,#e5e7eb)] !text-[var(--text-charcoal,#333)] !text-sm"
+              className="!h-10 !rounded-lg"
             >
               复制到公众号
             </FormatterButton>
           </div>
           {progressActive && (
-            <div className="px-4 py-2 bg-[var(--background-primary,#f5f5f7)] border-b border-[var(--border-color,#e5e7eb)]">
-              <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+            <div className="px-4 py-2 bg-background border-b border-border">
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                 <span>{progressLabel}</span>
                 <span>{progressPercent}%</span>
               </div>
-              <div className="h-2 bg-gray-100 rounded overflow-hidden">
-                <div className="h-full bg-[var(--accent-color,#5c7c68)] transition-all duration-200" style={{ width: `${progressPercent}%` }} />
+              <div className="h-2 bg-secondary rounded overflow-hidden">
+                <div className="h-full bg-primary transition-all duration-200" style={{ width: `${progressPercent}%` }} />
               </div>
             </div>
           )}
-          <div className="flex-1 overflow-y-auto p-6 bg-[var(--background-primary,#f5f5f7)] custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-6 bg-background custom-scrollbar">
             {formattedHtml ? (
               <div className="w-full max-w-[680px] mx-auto bg-white rounded-xl shadow relative">
                 <div
@@ -1211,9 +1211,9 @@ const App = () => {
 
         {/* Prompt Viewer Modal */}
         {viewTplId && (
-          <div className="fixed inset-0 z-[9999] bg-black/40 flex items-center justify-center p-4">
-            <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="flex items-center justify-between p-3 border-b">
+          <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+            <div className="w-full max-w-3xl bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+              <div className="flex items-center justify-between p-3 border-b border-border">
                 <h4 className="font-bold text-base">查看模板提示词：{viewTplName}</h4>
                 <div className="flex gap-2">
                   <FormatterButton variant="secondary" onClick={copyViewTemplatePrompt} className="!h-8 !py-1 !px-3 !text-xs">复制</FormatterButton>
@@ -1221,7 +1221,7 @@ const App = () => {
                 </div>
               </div>
               <div className="p-3">
-                <textarea readOnly value={viewTplPrompt} className="w-full h-[60vh] border rounded p-2 text-xs font-mono leading-relaxed" />
+                <textarea readOnly value={viewTplPrompt} className="w-full h-[60vh] border border-border rounded p-2 text-xs font-mono leading-relaxed bg-background" />
               </div>
             </div>
           </div>

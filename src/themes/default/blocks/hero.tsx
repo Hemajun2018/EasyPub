@@ -18,6 +18,7 @@ export function Hero({
   className?: string;
 }) {
   const highlightText = section.highlight_text ?? '';
+  const hasBackgroundImage = Boolean(section.background_image?.src);
   const titleLines = (section.title ?? '').split('\n');
   const renderLine = (line: string) => {
     if (!highlightText || !line.includes(highlightText)) {
@@ -27,7 +28,7 @@ export function Hero({
     return (
       <>
         {before}
-        <Highlighter action="underline" color="#FFB26B">
+        <Highlighter action="underline" color="var(--primary)">
           {highlightText}
         </Highlighter>
         {after}
@@ -45,21 +46,25 @@ export function Hero({
       )}
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -right-24 top-12 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(111,157,255,0.35),transparent_65%)] blur-2xl" />
-        <div className="absolute -left-16 top-32 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(255,201,160,0.4),transparent_65%)] blur-2xl" />
+        {!hasBackgroundImage && (
+          <>
+            <div className="absolute -right-24 top-12 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(111,157,255,0.35),transparent_65%)] blur-2xl" />
+            <div className="absolute -left-16 top-32 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(255,201,160,0.4),transparent_65%)] blur-2xl" />
+          </>
+        )}
       </div>
       {section.announcement && (
         <Link
           href={section.announcement.url || ''}
           target={section.announcement.target || '_self'}
-          className="group mx-auto mb-8 flex w-fit items-center gap-4 rounded-full border border-black/10 bg-white/80 p-1 pl-4 text-sm font-medium shadow-sm shadow-black/5 backdrop-blur transition"
+          className="group mx-auto mb-8 flex w-fit items-center gap-4 rounded-full border border-border bg-card/80 p-1 pl-4 text-sm font-medium shadow-sm shadow-black/5 backdrop-blur transition"
         >
           <span className="text-foreground">
             {section.announcement.title}
           </span>
-          <span className="block h-4 w-0.5 border-l border-black/10 bg-black/5" />
+          <span className="block h-4 w-0.5 border-l border-border bg-muted" />
 
-          <div className="size-6 overflow-hidden rounded-full bg-black text-white duration-500 group-hover:translate-x-0.5">
+          <div className="size-6 overflow-hidden rounded-full bg-primary text-primary-foreground duration-500 group-hover:translate-x-0.5">
             <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
               <span className="flex size-6">
                 <ArrowRight className="m-auto size-3" />
@@ -96,8 +101,8 @@ export function Hero({
                 className={cn(
                   'rounded-full px-20 py-5 text-base font-semibold shadow-xl transition',
                   button.variant === 'outline'
-                    ? 'bg-white/80 text-foreground shadow-black/10 ring-1 ring-black/10 hover:bg-white'
-                    : 'bg-black text-white shadow-black/20 hover:bg-black/90'
+                    ? 'bg-card/80 text-foreground shadow-black/10 ring-1 ring-border hover:bg-card'
+                    : 'bg-primary text-primary-foreground shadow-primary/20 hover:opacity-90'
                 )}
                 key={idx}
               >
@@ -127,7 +132,7 @@ export function Hero({
       {(section.image?.src || section.image_invert?.src) && (
         <div className="relative mt-12 sm:mt-16">
           <div className="relative z-10 mx-auto max-w-6xl px-4">
-            <div className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-white/70 shadow-2xl shadow-black/10 backdrop-blur">
+            <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/70 shadow-2xl shadow-black/10 backdrop-blur">
               <div
                 aria-hidden
                 className="h-6 w-full bg-[linear-gradient(90deg,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(0deg,rgba(15,23,42,0.06)_1px,transparent_1px)] bg-[size:12px_12px]"
@@ -175,11 +180,11 @@ export function Hero({
 
       {section.background_image?.src && (
         <div className="absolute inset-0 -z-10 hidden h-full w-full overflow-hidden md:block">
-          <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-white/70 to-white" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-white/10 via-white/30 to-white/70" />
           <Image
             src={section.background_image.src}
             alt={section.background_image.alt || ''}
-            className="object-cover opacity-25 blur-[2px]"
+            className="object-cover opacity-70"
             fill
             loading="lazy"
             sizes="(max-width: 768px) 0vw, 100vw"

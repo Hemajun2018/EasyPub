@@ -35,7 +35,7 @@ export function Updates({
                   <div className="flex-shrink-0 md:w-48">
                     <div className="pb-10 md:sticky md:top-8">
                       {post.version && (
-                        <div className="text-foreground border-primary text-primary relative z-10 inline-flex items-center justify-center rounded-lg border px-2 py-1 text-xs font-bold">
+                        <div className="bg-primary text-primary-foreground relative z-10 inline-flex items-center justify-center rounded-lg px-2 py-1 text-xs font-bold">
                           v{post.version}
                         </div>
                       )}

@@ -28,7 +28,7 @@ export function FeaturesList({
           <div className="w-full min-w-0 flex-1">
             {section.label && (
               <ScrollAnimation>
-                <span className="inline-flex items-center rounded-full border border-black/10 bg-white/80 px-4 py-1 text-xs font-medium uppercase tracking-[0.2em] text-foreground/70">
+                <span className="inline-flex items-center rounded-full border border-border bg-card/80 px-4 py-1 text-xs font-medium uppercase tracking-[0.2em] text-foreground/70">
                   {section.label}
                 </span>
               </ScrollAnimation>
@@ -60,7 +60,7 @@ export function FeaturesList({
                         className={cn(
                           'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
                           'h-9 px-4 py-2',
-                          'bg-background ring-foreground/10 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50 border border-transparent shadow-sm ring-1 shadow-black/15 duration-200'
+                          'bg-background ring-border hover:bg-muted/50 dark:hover:bg-muted/50 border border-transparent shadow-sm ring-1 shadow-black/15 duration-200'
                         )}
                       >
                         {button.icon && (
@@ -77,7 +77,7 @@ export function FeaturesList({
           <ScrollAnimation direction="right">
             <div className="relative mx-auto w-full max-w-[520px] flex-shrink-0">
               <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(111,157,255,0.35),transparent_60%)] blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-white/70 p-3 shadow-2xl shadow-black/10 backdrop-blur">
+              <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/70 p-3 shadow-2xl shadow-black/10 backdrop-blur">
                 <LazyImage
                   src={section.image?.src ?? ''}
                   alt={section.image?.alt ?? ''}
@@ -90,10 +90,10 @@ export function FeaturesList({
 
         <ScrollAnimation delay={0.1}>
           {/* Prevent horizontal scrolling, min-w-0 and break-words */}
-          <div className="relative grid min-w-0 grid-cols-1 gap-4 border-t border-black/10 pt-12 break-words sm:grid-cols-2 lg:grid-cols-4">
+          <div className="relative grid min-w-0 grid-cols-1 gap-4 border-t border-border pt-12 break-words sm:grid-cols-2 lg:grid-cols-4">
             {section.items?.map((item, idx) => (
               <div
-                className="min-w-0 space-y-3 rounded-2xl border border-black/5 bg-white/70 p-5 shadow-sm shadow-black/5 break-words"
+                className="min-w-0 space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm shadow-black/5 break-words"
                 key={idx}
               >
                 <div className="flex min-w-0 items-center gap-2 text-sm font-medium">
