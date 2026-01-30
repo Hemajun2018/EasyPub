@@ -18,9 +18,7 @@
         { "title": "Pricing", "url": "/pricing", "icon": "DollarSign" }
       ]
     },
-    "buttons": [
-      { "title": "Try for Free", "url": "/formatter", "icon": "Zap" }
-    ],
+    "buttons": [],
     "user_nav": {
       "show_name": true,
       "show_credits": true,

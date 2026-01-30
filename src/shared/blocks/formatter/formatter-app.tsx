@@ -8,6 +8,7 @@ import { Link } from '@/core/i18n/navigation';
 import { signOut, useSession } from '@/core/auth/client';
 import { useAppContext } from '@/shared/contexts/app';
 import { SignModal } from '@/shared/blocks/sign/sign-modal';
+import { SignUser } from '@/shared/blocks/sign/sign-user';
 import { User } from '@/shared/models/user';
 
 import { StyleType } from './types';
@@ -1052,28 +1053,14 @@ const App = () => {
           <img src="/logo.png" alt="EasyPub Logo" className="w-6 h-6 object-contain" />
           <h1 className="text-lg font-bold tracking-tight">EasyPub</h1>
         </Link>
-        <div className="flex items-center gap-3 text-sm text-gray-600">
-          {sessionUser ? (
-            <>
-              <span className="hidden md:inline">{sessionUser.email}</span>
-              <FormatterButton
-                variant="secondary"
-                className="!h-8 !py-1 !px-3 !text-xs"
-                onClick={() => signOut()}
-              >
-                退出
-              </FormatterButton>
-            </>
-          ) : (
-            <FormatterButton
-              variant="secondary"
-              className="!h-8 !py-1 !px-3 !text-xs"
-              onClick={() => setIsShowSignModal(true)}
-            >
-              登录
-            </FormatterButton>
-          )}
-        </div>
+        <SignUser
+          userNav={{
+            show_name: true,
+            show_credits: true,
+            show_sign_out: true,
+            items: [],
+          }}
+        />
       </header>
 
       {/* Main Grid */}
