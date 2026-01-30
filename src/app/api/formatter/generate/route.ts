@@ -1,3 +1,9 @@
+import { getUserInfo } from '@/shared/models/user';
+import { getRemainingCredits } from '@/shared/models/credit';
+import { createAITask, NewAITask } from '@/shared/models/ai_task';
+import { getUuid } from '@/shared/lib/hash';
+import { AITaskStatus } from '@/extensions/ai';
+
 const EVOLINK_BASE = 'https://api.evolink.ai/v1beta';
 
 export async function POST(req: Request) {
@@ -10,6 +16,23 @@ export async function POST(req: Request) {
   }
 
   try {
+    // 1. Authenticate user
+    const user = await getUserInfo();
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+      });
+    }
+
+    // 2. Check credits
+    const costCredits = 1;
+    const remainingCredits = await getRemainingCredits(user.id);
+    if (remainingCredits < costCredits) {
+      return new Response(JSON.stringify({ error: 'Insufficient credits' }), {
+        status: 403,
+      });
+    }
+
     const {
       userText,
       contents,
@@ -76,6 +99,8 @@ export async function POST(req: Request) {
 
     let finishReason: string | undefined;
     let outChars: number | undefined;
+    let taskId: string | undefined;
+
     try {
       const data = JSON.parse(text);
       const parts = data?.candidates?.[0]?.content?.parts || [];
@@ -91,6 +116,23 @@ export async function POST(req: Request) {
 
     if (!resp.ok) {
       return new Response(text || resp.statusText, { status: resp.status });
+    }
+
+    // 3. Consume credits and record task if the first turn of generation
+    // We only consume credits on the first turn to avoid overcharging for "Continue" turns
+    if (turn === 1 || !turn) {
+      const newAITask: NewAITask = {
+        id: getUuid(),
+        userId: user.id,
+        mediaType: 'text',
+        provider: 'gemini',
+        model: 'gemini-2.5-flash',
+        prompt: userText || (contents?.[0]?.parts?.[0]?.text) || 'AI Typesetting',
+        scene: 'formatter',
+        status: AITaskStatus.SUCCESS,
+        costCredits,
+      };
+      await createAITask(newAITask);
     }
 
     return new Response(text, {

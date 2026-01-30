@@ -14,7 +14,7 @@ import {
 } from '@react-email/components';
 
 export function VerifyEmail({
-  appName = 'our app',
+  appName = 'EasyPub',
   logoUrl,
   url,
 }: {
@@ -25,7 +25,7 @@ export function VerifyEmail({
   return (
     <Html>
       <Head />
-      <Preview>{`Verify your email for ${appName}`}</Preview>
+      <Preview>{`${appName} - 验证您的邮箱`}</Preview>
       <Body style={styles.body}>
         <Container style={styles.container}>
           <Section style={styles.card}>
@@ -44,34 +44,33 @@ export function VerifyEmail({
                 <Text style={styles.cardBrand}>{appName}</Text>
               </Section>
             )}
-            <Heading style={styles.h1}>Verify your email</Heading>
+            <Heading style={styles.h1}>欢迎加入 EasyPub</Heading>
             <Text style={styles.p}>
-              Click the button below to verify your email address and finish
-              signing in to <strong>{appName}</strong>.
+              感谢您注册 <strong>EasyPub 公众号AI排版器</strong>！
+              让我们一起开启高效、优雅的排版之旅。请点击下方按钮验证您的邮箱地址，完成账号激活。
             </Text>
 
             <Section style={styles.buttonWrap}>
               <Button href={url} style={styles.button}>
-                Verify email
+                立即验证邮箱
               </Button>
             </Section>
 
             <Text style={styles.muted}>
-              This link will expire in <strong>24 hours</strong>.
+              此链接将在 <strong>24 小时</strong>内失效。
             </Text>
 
             <Hr style={styles.hr} />
 
             <Text style={styles.small}>
-              If the button doesn&apos;t work, copy and paste this link into
-              your browser:
+              如果上面的按钮无法点击，请复制并粘贴以下链接到浏览器中进行访问：
             </Text>
             <Link href={url} style={styles.link}>
               {url}
             </Link>
 
             <Text style={styles.footer}>
-              If you didn&apos;t request this email, you can safely ignore it.
+              如果您没有请求此邮件，请直接忽略。
             </Text>
           </Section>
         </Container>
