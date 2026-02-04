@@ -13,8 +13,14 @@ export function Stats({
   return (
     <section
       id={section.id}
-      className={`py-12 md:py-24 ${section.className} ${className}`}
+      className={`relative py-12 md:py-24 ${section.className} ${className} overflow-hidden`}
     >
+      {/* Background glow effects */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/4 top-1/2 -translate-y-1/2 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(53,158,255,0.15),transparent_70%)] blur-3xl" />
+        <div className="absolute right-1/4 top-1/2 -translate-y-1/2 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(7,193,96,0.15),transparent_70%)] blur-3xl" />
+      </div>
+
       <div className={`container space-y-8 md:space-y-16`}>
         <ScrollAnimation>
           <div className="relative z-10 mx-auto max-w-xl space-y-6 text-center">
@@ -28,19 +34,27 @@ export function Stats({
         </ScrollAnimation>
 
         <ScrollAnimation delay={0.2}>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {section.items?.map((item, idx) => (
               <div
-                className="space-y-4 rounded-2xl border border-border bg-card p-6 text-center shadow-sm shadow-black/5"
+                className="group relative space-y-4 rounded-2xl border border-border bg-card/80 p-8 text-center shadow-lg shadow-black/5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30"
                 key={idx}
               >
+                {/* Subtle glow on hover */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-wechat-green/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                
                 <h3 className="sr-only">
                   {item.title} {item.description}
                 </h3>
-                <div className="text-foreground font-serif text-5xl font-semibold">
+                
+                {/* Gradient number */}
+                <div className="relative text-transparent bg-clip-text bg-gradient-to-r from-primary to-wechat-green font-serif text-6xl md:text-7xl font-black tracking-tight">
                   {item.title}
                 </div>
-                <p className="text-foreground/70 text-sm">{item.description}</p>
+                
+                <p className="text-foreground/70 text-base font-medium">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>

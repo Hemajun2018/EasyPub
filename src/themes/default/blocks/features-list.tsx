@@ -76,8 +76,10 @@ export function FeaturesList({
           </div>
           <ScrollAnimation direction="right">
             <div className="relative mx-auto w-full max-w-[520px] flex-shrink-0">
-              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(111,157,255,0.35),transparent_60%)] blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/70 p-3 shadow-2xl shadow-black/10 backdrop-blur">
+              {/* Glow effect */}
+              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(53,158,255,0.4),transparent_60%)] blur-3xl" />
+              {/* Glassmorphism container */}
+              <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/80 p-3 shadow-2xl shadow-primary/10 backdrop-blur-md">
                 <LazyImage
                   src={section.image?.src ?? ''}
                   alt={section.image?.alt ?? ''}
@@ -93,12 +95,14 @@ export function FeaturesList({
           <div className="relative grid min-w-0 grid-cols-1 gap-4 border-t border-border pt-12 break-words sm:grid-cols-2 lg:grid-cols-4">
             {section.items?.map((item, idx) => (
               <div
-                className="min-w-0 space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm shadow-black/5 break-words"
+                className="group min-w-0 space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm shadow-black/5 break-words transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30"
                 key={idx}
               >
-                <div className="flex min-w-0 items-center gap-2 text-sm font-medium">
+                <div className="flex min-w-0 items-center gap-3 text-sm font-medium">
                   {item.icon && (
-                    <SmartIcon name={item.icon as string} size={16} />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-wechat-green/10 text-primary transition-transform duration-300 group-hover:scale-110">
+                      <SmartIcon name={item.icon as string} size={16} />
+                    </div>
                   )}
                   <h3 className="min-w-0 break-words">
                     {item.title}

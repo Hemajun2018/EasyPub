@@ -95,7 +95,7 @@
         "label": "产品简介",
         "description": "一款为微信公众号创作者打造的 AI 智能排版工具。理解你的每一段话，自动重塑结构与视觉。",
         "image": {
-          "src": "/imgs/features/landing-page.png",
+          "src": "/imgs/features/1.png",
           "alt": "introduce"
         },
         "items": [

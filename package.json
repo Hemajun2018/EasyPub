@@ -32,6 +32,7 @@
     "auth:generate": "npx @better-auth/cli generate --config=src/core/auth/index.ts",
     "rbac:init": "npx tsx scripts/init-rbac.ts",
     "rbac:assign": "npx tsx scripts/assign-role.ts",
+    "preview:generate": "npx tsx scripts/generate-preview-samples.ts",
     "postinstall": "fumadocs-mdx",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",

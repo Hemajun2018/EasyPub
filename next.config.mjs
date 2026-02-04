@@ -46,6 +46,7 @@ const nextConfig = {
     ];
   },
   turbopack: {
+    root: '.',
     resolveAlias: {
       // fs: {
       //   browser: './empty.ts', // We recommend to fix code imports before using this method
@@ -53,11 +54,10 @@ const nextConfig = {
     },
   },
   experimental: {
-    turbopackFileSystemCacheForDev: true,
+    reactCompiler: true,
     // Disable mdxRs for Vercel deployment compatibility with fumadocs-mdx
     ...(process.env.VERCEL ? {} : { mdxRs: true }),
   },
-  reactCompiler: true,
 };
 
 export default withBundleAnalyzer(withNextIntl(withMDX(nextConfig)));

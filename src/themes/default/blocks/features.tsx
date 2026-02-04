@@ -33,11 +33,11 @@ export function Features({
           <div className="relative mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {section.items?.map((item, idx) => (
               <div
-                className="space-y-3 rounded-2xl border border-border bg-card p-6 shadow-sm shadow-black/5"
+                className="group space-y-3 rounded-2xl border border-border bg-card p-6 shadow-sm shadow-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30"
                 key={idx}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-wechat-green text-white shadow-lg shadow-primary/20 transition-transform duration-300 group-hover:scale-110">
                     <SmartIcon name={item.icon as string} size={18} />
                   </div>
                   <h3 className="text-base font-semibold">{item.title}</h3>

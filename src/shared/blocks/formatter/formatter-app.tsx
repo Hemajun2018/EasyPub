@@ -45,6 +45,7 @@ const App = () => {
   const [viewTplId, setViewTplId] = useState<string>('');
   const [viewTplName, setViewTplName] = useState<string>('');
   const [viewTplPrompt, setViewTplPrompt] = useState<string>('');
+  const [showCodeModal, setShowCodeModal] = useState(false);
   
   // Loading states
   const [isFormatting, setIsFormatting] = useState(false);
@@ -1150,14 +1151,26 @@ const App = () => {
         <section className="col-span-12 md:col-span-5 flex flex-col h-full bg-card rounded-xl border border-border overflow-hidden">
           <div className="flex items-center justify-between p-4 border-b border-border">
             <h3 className="text-lg font-bold">排版预览</h3>
-            <FormatterButton
-              variant="secondary"
-              onClick={handleCopyToWeChat}
-              disabled={!formattedHtml}
-              className="!h-10 !rounded-lg"
-            >
-              复制到公众号
-            </FormatterButton>
+            <div className="flex items-center gap-2">
+              {sessionUser?.isAdmin && (
+                <FormatterButton
+                  variant="ghost"
+                  onClick={() => setShowCodeModal(true)}
+                  disabled={!formattedHtml}
+                  className="!h-10 !rounded-lg"
+                >
+                  查看代码
+                </FormatterButton>
+              )}
+              <FormatterButton
+                variant="secondary"
+                onClick={handleCopyToWeChat}
+                disabled={!formattedHtml}
+                className="!h-10 !rounded-lg"
+              >
+                复制到公众号
+              </FormatterButton>
+            </div>
           </div>
           {progressActive && (
             <div className="px-4 py-2 bg-background border-b border-border">
@@ -1209,6 +1222,37 @@ const App = () => {
               </div>
               <div className="p-3">
                 <textarea readOnly value={viewTplPrompt} className="w-full h-[60vh] border border-border rounded p-2 text-xs font-mono leading-relaxed bg-background" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Code Viewer Modal (Admin Only) */}
+        {showCodeModal && (
+          <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+            <div className="w-full max-w-4xl bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+              <div className="flex items-center justify-between p-3 border-b border-border">
+                <h4 className="font-bold text-base">查看排版代码</h4>
+                <div className="flex gap-2">
+                  <FormatterButton 
+                    variant="secondary" 
+                    onClick={() => {
+                      navigator.clipboard.writeText(formattedHtml);
+                      alert('代码已复制到剪贴板');
+                    }} 
+                    className="!h-8 !py-1 !px-3 !text-xs"
+                  >
+                    全部复制
+                  </FormatterButton>
+                  <FormatterButton variant="ghost" onClick={() => setShowCodeModal(false)} className="!h-8 !py-1 !px-3 !text-xs">关闭</FormatterButton>
+                </div>
+              </div>
+              <div className="p-3">
+                <textarea 
+                  readOnly 
+                  value={formattedHtml} 
+                  className="w-full h-[70vh] border border-border rounded p-2 text-xs font-mono leading-relaxed bg-background" 
+                />
               </div>
             </div>
           </div>

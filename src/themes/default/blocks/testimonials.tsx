@@ -13,17 +13,21 @@ export function Testimonials({
 }) {
   const TestimonialCard = ({ item }: { item: SectionItem }) => {
     return (
-      <div className="flex h-full flex-col justify-between gap-6 rounded-2xl border border-black/10 bg-white/80 p-7 shadow-lg shadow-black/5">
+      <div className="group flex h-full flex-col justify-between gap-6 rounded-2xl border border-border bg-card/80 p-7 shadow-lg shadow-black/5 backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30">
         <p className='text-foreground/80 text-balance before:mr-1 before:content-["\201C"] after:ml-1 after:content-["\201D"]'>
           {item.quote || item.description}
         </p>
         <div className="flex items-center gap-3">
-          <div className="aspect-square size-10 overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm shadow-black/10">
-            <LazyImage
-              src={item.image?.src || item.avatar?.src || ''}
-              alt={item.image?.alt || item.avatar?.alt || item.name || ''}
-              className="h-full w-full object-cover"
-            />
+          {/* Avatar with gradient border */}
+          <div className="relative">
+            <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-br from-primary to-wechat-green opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="relative aspect-square size-10 overflow-hidden rounded-xl border border-border bg-card shadow-sm shadow-black/10">
+              <LazyImage
+                src={item.image?.src || item.avatar?.src || ''}
+                alt={item.image?.alt || item.avatar?.alt || item.name || ''}
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
           <h3 className="sr-only">
             {item.name}, {item.role || item.title}

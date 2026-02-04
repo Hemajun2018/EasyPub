@@ -8,6 +8,7 @@ import { Highlighter } from '@/shared/components/ui/highlighter';
 import { cn } from '@/shared/lib/utils';
 import { Section } from '@/shared/types/blocks/landing';
 
+import { HeroPreview } from './hero-preview';
 import { SocialAvatars } from './social-avatars';
 
 export function Hero({
@@ -48,11 +49,23 @@ export function Hero({
       <div className="pointer-events-none absolute inset-0 -z-10">
         {!hasBackgroundImage && (
           <>
-            <div className="absolute -right-24 top-12 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(111,157,255,0.35),transparent_65%)] blur-2xl" />
-            <div className="absolute -left-16 top-32 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(255,201,160,0.4),transparent_65%)] blur-2xl" />
+            {/* Large glow effects */}
+            <div className="absolute -right-24 top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(53,158,255,0.35),transparent_65%)] blur-[120px] opacity-50" />
+            <div className="absolute -left-16 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(7,193,96,0.35),transparent_65%)] blur-[100px] opacity-50" />
           </>
         )}
       </div>
+      {/* New Feature Badge with Pulse Animation */}
+      <div className="mx-auto mb-8 flex w-fit items-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+          </span>
+          为公众号创作者而生
+        </div>
+      </div>
+
       {section.announcement && (
         <Link
           href={section.announcement.url || ''}
@@ -78,12 +91,24 @@ export function Hero({
       )}
 
       <div className="relative mx-auto max-w-full px-4 text-center md:max-w-4xl">
-        <h1 className="text-foreground font-serif text-5xl leading-[1.1] font-bold tracking-tight text-balance sm:mt-12 sm:text-[4.5rem]">
-          {titleLines.map((line, index) => (
-            <span className="block" key={`${line}-${index}`}>
-              {renderLine(line)}
-            </span>
-          ))}
+        <h1 className="font-serif text-4xl md:text-6xl leading-[1.1] font-black tracking-tight text-balance">
+          {titleLines.map((line, index) => {
+            // Apply gradient to the second line (index 1)
+            if (index === 1) {
+              return (
+                <span className="block" key={`${line}-${index}`}>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-wechat-green">
+                    {line}
+                  </span>
+                </span>
+              );
+            }
+            return (
+              <span className="block text-foreground" key={`${line}-${index}`}>
+                {renderLine(line)}
+              </span>
+            );
+          })}
         </h1>
 
         <p
@@ -99,10 +124,10 @@ export function Hero({
                 size={button.size || 'lg'}
                 variant={button.variant || 'default'}
                 className={cn(
-                  'rounded-full px-20 py-5 text-base font-semibold shadow-xl transition',
+                  'rounded-full px-20 py-5 text-base font-bold shadow-lg transition-all hover:scale-105',
                   button.variant === 'outline'
                     ? 'bg-card/80 text-foreground shadow-black/10 ring-1 ring-border hover:bg-card'
-                    : 'bg-primary text-primary-foreground shadow-primary/20 hover:opacity-90'
+                    : 'bg-primary text-primary-foreground shadow-primary/30 hover:opacity-90'
                 )}
                 key={idx}
               >
@@ -127,6 +152,11 @@ export function Hero({
             <SocialAvatars tip={section.avatars_tip || ''} />
           </div>
         )}
+      </div>
+
+      {/* Before/After Preview Component */}
+      <div className="relative mt-12 sm:mt-16">
+        <HeroPreview />
       </div>
 
       {(section.image?.src || section.image_invert?.src) && (
