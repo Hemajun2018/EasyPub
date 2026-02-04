@@ -46,7 +46,7 @@ export function HeroPreview() {
         {/* Left: Before - Plain Text */}
         <div className="relative group">
           <div className="absolute -inset-0.5 bg-gray-200 dark:bg-white/10 rounded-2xl opacity-50" />
-          <div className="relative bg-white dark:bg-[#131022] rounded-xl border border-gray-200 dark:border-white/10 shadow-xl flex flex-col h-[500px]">
+          <div className="relative bg-white dark:bg-[#131022] rounded-xl border border-gray-200 dark:border-white/10 shadow-xl flex flex-col h-[600px]">
             {/* Header */}
             <div className="h-10 border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#1a162d] flex items-center justify-between px-4 rounded-t-xl">
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
@@ -87,7 +87,7 @@ export function HeroPreview() {
         {/* Right: After - Phone Preview with Real Template Styles */}
         <div className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-primary to-wechat-green rounded-2xl blur opacity-20" />
-          <div className="relative bg-gray-100 dark:bg-surface-dark rounded-xl border border-gray-200 dark:border-white/10 shadow-2xl flex flex-col h-[500px] overflow-hidden items-center justify-center">
+          <div className="relative bg-gray-100 dark:bg-surface-dark rounded-xl border border-gray-200 dark:border-white/10 shadow-2xl flex flex-col h-[600px] overflow-hidden items-center justify-center">
             {/* Style Indicator */}
             <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
               <span className="bg-wechat-green text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg uppercase tracking-widest">
@@ -99,54 +99,90 @@ export function HeroPreview() {
             </div>
 
             {/* Phone Frame */}
-            <div className="w-[280px] h-[450px] bg-white rounded-[2.5rem] border-[6px] border-gray-800 shadow-2xl overflow-hidden flex flex-col relative scale-90 transition-all duration-500">
+            <div className="w-[260px] h-[540px] bg-white rounded-[3rem] border-[8px] border-gray-900 shadow-2xl overflow-hidden flex flex-col relative scale-[0.98] transition-all duration-500 ring-1 ring-white/20">
+              
+              {/* Dynamic Island (iPhone Pro Look) */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full z-20 flex items-center justify-between px-3">
+                <div className="w-1 h-1 rounded-full bg-blue-500/20" />
+                <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+              </div>
+
               {/* Status Bar */}
-              <div className="h-5 bg-white w-full flex justify-between items-center px-6 text-[8px] font-bold text-gray-800 shrink-0">
+              <div className="h-7 bg-white w-full flex justify-between items-center px-8 text-[8px] font-bold text-black shrink-0 pt-1">
                 <span>9:41</span>
                 <div className="flex gap-1 items-center">
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M2 22h20V2z" />
                   </svg>
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
-                  </svg>
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" />
                   </svg>
                 </div>
               </div>
 
               {/* WeChat Header */}
-              <div className="h-8 border-b border-gray-100 flex items-center px-3 bg-[#f2f2f2] text-black shrink-0">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              <div className="h-9 flex items-center px-4 bg-white text-black shrink-0 relative">
+                <svg className="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span className="ml-2 text-[10px] font-medium">预览文章</span>
-                <svg className="w-4 h-4 ml-auto" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                </svg>
+                <div className="flex gap-1 ml-auto">
+                  <div className="w-[3px] h-[3px] rounded-full bg-black"></div>
+                  <div className="w-[3px] h-[3px] rounded-full bg-black"></div>
+                  <div className="w-[3px] h-[3px] rounded-full bg-black"></div>
+                </div>
               </div>
 
               {/* Article Content - Real formatted HTML */}
-              <div className="flex-1 overflow-y-auto bg-white p-4 scrollbar-hide">
+              <div className="flex-1 overflow-y-auto no-scrollbar bg-white">
                 {loading ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-gray-400 text-xs">加载中...</div>
                   </div>
                 ) : currentFormattedContent ? (
-                  <>
-                    <div className="text-[8px] text-gray-400 mb-3 flex items-center gap-2">
-                      <span className="text-[#576b95]">EasyPub AI</span>
-                      <span>2024-05-20</span>
+                  <div 
+                    className="transition-all duration-500" 
+                    style={{ 
+                      transform: 'scale(0.69)', 
+                      transformOrigin: 'top left', 
+                      width: '145%',
+                      padding: '24px 20px'
+                    }}
+                  >
+                    {/* Official WeChat Article Header */}
+                    <div className="mb-6">
+                      <h1 className="text-[26px] font-bold leading-[1.4] mb-4 text-[#333] tracking-tighter">
+                        EasyPub：AI 驱动的智能公众号排版助手
+                      </h1>
+                      
+                      <div className="flex items-center gap-x-3 mb-3">
+                        <span className="bg-[#f0f0f0] text-[#888] text-[13px] px-1.5 py-0.5 rounded-sm">原创</span>
+                        <span className="text-[#888] text-[16px]">何慢慢</span>
+                        <span className="text-[#576b95] text-[16px] font-medium">EasyPub</span>
+                        <span className="text-[#b2b2b2] text-[16px]">2026-02-04</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-3 text-[#b2b2b2] text-[15px]">
+                        <span>北京</span>
+                        <div className="flex items-center gap-1.5 text-[#576b95]">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3V11H5v-1a7 7 0 0 1 14 0v1h-4v9h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z" />
+                          </svg>
+                          <span className="font-bold">2734人收听</span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Render real formatted content */}
-                    <div 
-                      className="transition-all duration-500" 
-                      style={{ transform: 'scale(0.65)', transformOrigin: 'top left', width: '154%' }}
-                      dangerouslySetInnerHTML={{ __html: currentFormattedContent }}
-                    />
-                  </>
+                    {/* We remove the first title if it exists in the content to avoid duplication */}
+                      <div 
+                        dangerouslySetInnerHTML={{ 
+                          __html: currentFormattedContent
+                            // Removing any block (h1-h6, p, section, div) that contains the main title text
+                            .replace(/<(h[1-6]|p|section|div)[^>]*>(?:<[^>]+>)*\s*EasyPub[：:][\s\S]*?排版助手\s*(?:<\/[^>]+>)*<\/\1>/i, '')
+                          .replace(/<(section|div|p)[^>]*>\s*<\/\1>/gi, '') // Clean up empty containers
+                        }}
+                      />
+                  </div>
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-gray-400 text-xs text-center px-4">
