@@ -142,26 +142,26 @@ export function HeroPreview() {
                   <div 
                     className="transition-all duration-500" 
                     style={{ 
-                      transform: 'scale(0.69)', 
+                      transform: 'scale(0.55)', 
                       transformOrigin: 'top left', 
-                      width: '145%',
+                      width: '182%',
                       padding: '24px 20px'
                     }}
                   >
                     {/* Official WeChat Article Header */}
                     <div className="mb-6">
-                      <h1 className="text-[26px] font-bold leading-[1.4] mb-4 text-[#333] tracking-tighter">
+                      <h1 className="text-[18px] font-bold leading-[1.4] mb-4 text-[#333] tracking-tighter">
                         EasyPub：AI 驱动的智能公众号排版助手
                       </h1>
                       
-                      <div className="flex items-center gap-x-3 mb-3">
-                        <span className="bg-[#f0f0f0] text-[#888] text-[13px] px-1.5 py-0.5 rounded-sm">原创</span>
-                        <span className="text-[#888] text-[16px]">何慢慢</span>
-                        <span className="text-[#576b95] text-[16px] font-medium">EasyPub</span>
-                        <span className="text-[#b2b2b2] text-[16px]">2026-02-04</span>
+                      <div className="flex items-center gap-x-2 mb-3 whitespace-nowrap">
+                        <span className="bg-[#f0f0f0] text-[#888] text-[10px] px-1.5 py-0.5 rounded-sm shrink-0">原创</span>
+                        <span className="text-[#888] text-[12px] shrink-0">何慢慢</span>
+                        <span className="text-[#576b95] text-[12px] font-medium shrink-0">EasyPub</span>
+                        <span className="text-[#b2b2b2] text-[12px] shrink-0">2026-02-04 22:23</span>
                       </div>
                       
-                      <div className="flex items-center gap-3 text-[#b2b2b2] text-[15px]">
+                      <div className="flex items-center gap-3 text-[#b2b2b2] text-[13px]">
                         <span>北京</span>
                         <div className="flex items-center gap-1.5 text-[#576b95]">
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -180,6 +180,7 @@ export function HeroPreview() {
                             // Removing any block (h1-h6, p, section, div) that contains the main title text
                             .replace(/<(h[1-6]|p|section|div)[^>]*>(?:<[^>]+>)*\s*EasyPub[：:][\s\S]*?排版助手\s*(?:<\/[^>]+>)*<\/\1>/i, '')
                           .replace(/<(section|div|p)[^>]*>\s*<\/\1>/gi, '') // Clean up empty containers
+                          .replace(/margin-top:\s*-\d+(\.\d+)?em/gi, 'margin-top: 0') // Fix overlap for specific styles like "Logic Thinking"
                         }}
                       />
                   </div>
