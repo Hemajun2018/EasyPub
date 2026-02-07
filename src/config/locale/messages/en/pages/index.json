@@ -3,8 +3,6 @@
     "show_sections": [
       "hero",
 
-      "introduce",
-      "benefits",
       "usage",
       "features",
       "stats",
@@ -179,7 +177,7 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
-        "title": "3 steps to publish",
+        "title": "4 steps to publish",
         "description": "From draft to WeChat-ready HTML in minutes:",
         "image": {
           "src": "/imgs/features/1.png",
@@ -191,6 +189,7 @@
           {
             "title": "Input/Paste Content",
             "description": "Type directly or paste from Word/Notion/Markdown. We clean up the mess.",
+            "icon": "RiFileCopyLine",
             "image": {
               "src": "/imgs/features/5.png",
               "alt": "usage"
@@ -199,6 +198,7 @@
           {
             "title": "Pick a Style",
             "description": "Switch across 9 styles and preview instantly.",
+            "icon": "RiPaletteLine",
             "image": {
               "src": "/imgs/features/6.png",
               "alt": "usage"
@@ -207,6 +207,7 @@
           {
             "title": "AI Format in One Click",
             "description": "Semantic restructuring with polished inline styles.",
+            "icon": "RiMagicLine",
             "image": {
               "src": "/imgs/features/7.png",
               "alt": "usage"
@@ -215,6 +216,7 @@
           {
             "title": "Copy to WeChat",
             "description": "Images are optimized and encoded. Paste and publish.",
+            "icon": "RiWechatLine",
             "image": {
               "src": "/imgs/features/8.png",
               "alt": "usage"
@@ -314,7 +316,6 @@
           {"question": "How does EasyPub ensure WeChat compatibility?", "answer": "We generate strict inline styles and adapt for common mobile layouts to avoid style loss after pasting."},
           {"question": "Can I paste from Word/Notion/Markdown?", "answer": "Yes. We clean messy pasted code and preserve image anchors and structure."},
           {"question": "Can I customize the visual style?", "answer": "Choose from 9 curated styles and fine-tune headings, quotes, and lists."},
-          {"question": "Can I still edit after generation?", "answer": "Absolutely. EasyPub outputs standard HTML you can tweak before pasting."},
           {"question": "How are images handled?", "answer": "We auto-compress images and keep them WeChat-safe for stable rendering."},
           {"question": "What languages are supported?", "answer": "English and Chinese UIs are available."}
         ]

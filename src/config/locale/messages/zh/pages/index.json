@@ -3,8 +3,6 @@
     "show_sections": [
       "hero",
 
-      "introduce",
-      "benefits",
       "usage",
       "features",
       "stats",
@@ -177,8 +175,8 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
-        "title": "3 步完成排版",
-        "description": "从草稿到成稿，只需三步：",
+        "title": "4 步完成排版",
+        "description": "从草稿到成稿，只需四步：",
         "image": {
           "src": "/imgs/features/1.png",
           "alt": "usage"
@@ -189,6 +187,7 @@
           {
             "title": "输入/粘贴内容",
             "description": "直接输入或从 Word、Notion、Markdown 粘贴，自动清理冗余。",
+            "icon": "RiFileCopyLine",
             "image": {
               "src": "/imgs/features/5.png",
               "alt": "usage"
@@ -197,6 +196,7 @@
           {
             "title": "选择风格",
             "description": "从 9 种专业风格中一键切换，实时预览效果。",
+            "icon": "RiPaletteLine",
             "image": {
               "src": "/imgs/features/6.png",
               "alt": "usage"
@@ -205,6 +205,7 @@
           {
             "title": "一键 AI 排版",
             "description": "语义级重排结构，自动生成内联样式的精美图文。",
+            "icon": "RiMagicLine",
             "image": {
               "src": "/imgs/features/7.png",
               "alt": "usage"
@@ -213,6 +214,7 @@
           {
             "title": "复制到公众号",
             "description": "图片自动处理为合适体积与编码，粘贴即用。",
+            "icon": "RiWechatLine",
             "image": {
               "src": "/imgs/features/8.png",
               "alt": "usage"
@@ -319,11 +321,7 @@
           },
           {
             "question": "可以自定义视觉风格吗？",
-            "answer": "内置 9 种风格可一键切换，也可在生成后微调标题、引用与列表样式。"
-          },
-          {
-            "question": "生成后还能手动修改吗？",
-            "answer": "当然可以。EasyPub 输出标准 HTML，可再做细节微调。"
+            "answer": "内置 多种风格模板可一键切换"
           },
           {
             "question": "图片如何处理？",
