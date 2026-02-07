@@ -57,7 +57,7 @@
               "Priority Support",
               "Valid for 1 Year"
             ],
-            "interval": "year",
+            "interval": "one-time",
             "amount": 2900,
             "currency": "USD",
             "price": "$29",
@@ -71,7 +71,7 @@
             "unit": "/ year",
             "is_featured": true,
             "button": {
-              "title": "Subscribe Now",
+              "title": "Buy Now",
               "url": "/#pricing",
               "icon": "RiFlashlightFill"
             },

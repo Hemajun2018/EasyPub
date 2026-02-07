@@ -57,7 +57,7 @@
               "优先技术支持",
               "有效期一年"
             ],
-            "interval": "year",
+            "interval": "one-time",
             "amount": 19900,
             "currency": "CNY",
             "price": "¥199",
@@ -71,7 +71,7 @@
             "unit": "/ 年",
             "is_featured": true,
             "button": {
-              "title": "立即订阅",
+              "title": "立即购买",
               "url": "/#pricing",
               "icon": "RiFlashlightFill"
             },
