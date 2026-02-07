@@ -62,4 +62,13 @@ const nextConfig = {
 
 export default withBundleAnalyzer(withNextIntl(withMDX(nextConfig)));
 
-initOpenNextCloudflareForDev();
+const shouldInitCloudflareDev =
+  process.env.NODE_ENV === 'development' &&
+  !process.env.VERCEL &&
+  !process.env.CI;
+
+if (shouldInitCloudflareDev) {
+  void initOpenNextCloudflareForDev().catch((error) => {
+    console.warn('Skip Cloudflare dev init:', error?.message ?? error);
+  });
+}
