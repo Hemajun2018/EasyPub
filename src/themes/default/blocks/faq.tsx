@@ -7,7 +7,14 @@ import {
   AccordionTrigger,
 } from '@/shared/components/ui/accordion';
 import { ScrollAnimation } from '@/shared/components/ui/scroll-animation';
+import { cn } from '@/shared/lib/utils';
 import { Section } from '@/shared/types/blocks/landing';
+
+import {
+  landingCardBaseClassName,
+  SectionBackdrop,
+  SectionHeader,
+} from './landing-section-kit';
 
 export function Faq({
   section,
@@ -17,48 +24,48 @@ export function Faq({
   className?: string;
 }) {
   return (
-    <section id={section.id} className={`py-16 md:py-24 ${className}`}>
-      <div className={`mx-auto max-w-full px-4 md:max-w-3xl md:px-8`}>
+    <section
+      id={section.id}
+      className={`relative overflow-hidden py-16 md:py-24 ${section.className || ''} ${className || ''}`}
+    >
+      <SectionBackdrop className="opacity-[0.45]" />
+
+      <div className="container max-w-3xl">
         <ScrollAnimation>
-          <div className="mx-auto max-w-2xl text-center text-balance">
-            <h2 className="text-foreground mb-4 font-serif text-3xl font-semibold tracking-tight md:text-5xl">
-              {section.title}
-            </h2>
-            <p className="text-foreground/70 mb-6 md:mb-12 lg:mb-16">
-              {section.description}
-            </p>
-          </div>
+          <SectionHeader
+            title={section.title}
+            description={section.description}
+          />
         </ScrollAnimation>
 
         <ScrollAnimation delay={0.2}>
           <div className="mx-auto mt-12 max-w-full">
-            <Accordion
-              type="single"
-              collapsible
-              className="w-full space-y-3"
-            >
+            <Accordion type="single" collapsible className="w-full space-y-3">
               {section.items?.map((item, idx) => (
                 <div className="group" key={idx}>
                   <AccordionItem
                     value={item.question || item.title || ''}
-                    className="peer rounded-2xl border border-black/10 bg-white/80 px-6 py-2 shadow-sm shadow-black/5 data-[state=open]:bg-white"
+                    className={cn(
+                      'peer data-[state=open]:bg-card overflow-hidden p-0',
+                      // Keep the overall card language consistent with the rest of the landing page.
+                      landingCardBaseClassName
+                    )}
                   >
-                    <AccordionTrigger className="cursor-pointer text-base font-medium hover:no-underline">
+                    <AccordionTrigger className="cursor-pointer px-6 py-4 text-base font-semibold hover:no-underline">
                       {item.question || item.title || ''}
                     </AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent className="px-6 pb-5">
                       <p className="text-foreground/70 text-base leading-relaxed">
                         {item.answer || item.description || ''}
                       </p>
                     </AccordionContent>
                   </AccordionItem>
-                  <hr className="mx-7 border-dashed border-black/10 group-last:hidden peer-data-[state=open]:opacity-0" />
                 </div>
               ))}
             </Accordion>
 
             <p
-              className="text-foreground/60 mt-6 px-8 text-sm"
+              className="text-foreground/60 mt-6 px-2 text-sm"
               dangerouslySetInnerHTML={{ __html: section.tip || '' }}
             />
           </div>

@@ -50,17 +50,17 @@ export function Hero({
         {!hasBackgroundImage && (
           <>
             {/* Large glow effects */}
-            <div className="absolute -right-24 top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(53,158,255,0.35),transparent_65%)] blur-[120px] opacity-50" />
-            <div className="absolute -left-16 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(7,193,96,0.35),transparent_65%)] blur-[100px] opacity-50" />
+            <div className="absolute top-20 -right-24 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(53,158,255,0.35),transparent_65%)] opacity-50 blur-[120px]" />
+            <div className="absolute bottom-0 -left-16 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(7,193,96,0.35),transparent_65%)] opacity-50 blur-[100px]" />
           </>
         )}
       </div>
       {/* New Feature Badge with Pulse Animation */}
       <div className="mx-auto mb-8 flex w-fit items-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
+        <div className="border-primary/20 bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium backdrop-blur">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+            <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+            <span className="bg-primary relative inline-flex h-2 w-2 rounded-full" />
           </span>
           为公众号创作者而生
         </div>
@@ -70,14 +70,12 @@ export function Hero({
         <Link
           href={section.announcement.url || ''}
           target={section.announcement.target || '_self'}
-          className="group mx-auto mb-8 flex w-fit items-center gap-4 rounded-full border border-border bg-card/80 p-1 pl-4 text-sm font-medium shadow-sm shadow-black/5 backdrop-blur transition"
+          className="group border-border bg-card/80 mx-auto mb-8 flex w-fit items-center gap-4 rounded-full border p-1 pl-4 text-sm font-medium shadow-sm shadow-black/5 backdrop-blur transition"
         >
-          <span className="text-foreground">
-            {section.announcement.title}
-          </span>
-          <span className="block h-4 w-0.5 border-l border-border bg-muted" />
+          <span className="text-foreground">{section.announcement.title}</span>
+          <span className="border-border bg-muted block h-4 w-0.5 border-l" />
 
-          <div className="size-6 overflow-hidden rounded-full bg-primary text-primary-foreground duration-500 group-hover:translate-x-0.5">
+          <div className="bg-primary text-primary-foreground size-6 overflow-hidden rounded-full duration-500 group-hover:translate-x-0.5">
             <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
               <span className="flex size-6">
                 <ArrowRight className="m-auto size-3" />
@@ -91,20 +89,20 @@ export function Hero({
       )}
 
       <div className="relative mx-auto max-w-full px-4 text-center md:max-w-4xl">
-        <h1 className="font-serif text-4xl md:text-6xl leading-[1.1] font-black tracking-tight text-balance">
+        <h1 className="font-sans text-4xl leading-[1.08] font-black tracking-tight text-balance md:text-6xl">
           {titleLines.map((line, index) => {
             // Apply gradient to the second line (index 1)
             if (index === 1) {
               return (
                 <span className="block" key={`${line}-${index}`}>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-wechat-green">
+                  <span className="from-primary to-wechat-green bg-gradient-to-r bg-clip-text text-transparent">
                     {line}
                   </span>
                 </span>
               );
             }
             return (
-              <span className="block text-foreground" key={`${line}-${index}`}>
+              <span className="text-foreground block" key={`${line}-${index}`}>
                 {renderLine(line)}
               </span>
             );
@@ -126,7 +124,7 @@ export function Hero({
                 className={cn(
                   'rounded-full px-20 py-5 text-base font-bold shadow-lg transition-all hover:scale-105',
                   button.variant === 'outline'
-                    ? 'bg-card/80 text-foreground shadow-black/10 ring-1 ring-border hover:bg-card'
+                    ? 'bg-card/80 text-foreground ring-border hover:bg-card ring-1 shadow-black/10'
                     : 'bg-primary text-primary-foreground shadow-primary/30 hover:opacity-90'
                 )}
                 key={idx}
@@ -162,7 +160,7 @@ export function Hero({
       {(section.image?.src || section.image_invert?.src) && (
         <div className="relative mt-12 sm:mt-16">
           <div className="relative z-10 mx-auto max-w-6xl px-4">
-            <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/70 shadow-2xl shadow-black/10 backdrop-blur">
+            <div className="border-border bg-card/70 relative overflow-hidden rounded-[2rem] border shadow-2xl shadow-black/10 backdrop-blur">
               <div
                 aria-hidden
                 className="h-6 w-full bg-[linear-gradient(90deg,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(0deg,rgba(15,23,42,0.06)_1px,transparent_1px)] bg-[size:12px_12px]"

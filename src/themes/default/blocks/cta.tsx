@@ -7,6 +7,8 @@ import { ScrollAnimation } from '@/shared/components/ui/scroll-animation';
 import { cn } from '@/shared/lib/utils';
 import { Section } from '@/shared/types/blocks/landing';
 
+import { SectionBackdrop } from './landing-section-kit';
+
 export function Cta({
   section,
   className,
@@ -17,13 +19,18 @@ export function Cta({
   return (
     <section
       id={section.id}
-      className={cn('py-16 md:py-24', section.className, className)}
+      className={cn(
+        'relative overflow-hidden py-16 md:py-24',
+        section.className,
+        className
+      )}
     >
       <div className="container">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-[radial-gradient(600px_220px_at_50%_-40px,var(--primary-foreground),transparent),bg-card] px-6 py-16 text-center shadow-2xl shadow-black/10 md:px-12">
+        <SectionBackdrop className="opacity-[0.35]" />
+        <div className="border-border relative overflow-hidden rounded-[2.5rem] border bg-[radial-gradient(600px_220px_at_50%_-40px,var(--primary-foreground),transparent),bg-card] px-6 py-16 text-center shadow-2xl shadow-black/10 md:px-12">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.9),transparent_55%)]" />
           <ScrollAnimation>
-            <h2 className="text-foreground relative font-serif text-4xl font-semibold text-balance lg:text-5xl">
+            <h2 className="text-foreground relative font-sans text-4xl font-semibold tracking-tight text-balance lg:text-5xl">
               {section.title}
             </h2>
           </ScrollAnimation>
@@ -45,7 +52,7 @@ export function Cta({
                   className={cn(
                     'rounded-full px-8 text-sm font-medium shadow-lg transition',
                     button.variant === 'outline'
-                      ? 'bg-card text-foreground shadow-black/10 ring-1 ring-border hover:bg-card/90'
+                      ? 'bg-card text-foreground ring-border hover:bg-card/90 ring-1 shadow-black/10'
                       : 'bg-primary text-primary-foreground shadow-primary/25 hover:opacity-90'
                   )}
                 >

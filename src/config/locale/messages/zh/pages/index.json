@@ -6,7 +6,6 @@
       "usage",
       "features",
       "stats",
-      "testimonials",
       "faq",
       "cta"
     ],
@@ -308,7 +307,7 @@
       },
       "faq": {
         "id": "faq",
-        "title": "EasyPub 常见问题",
+        "title": "常见问题",
         "description": "还有问题？欢迎联系我们。",
         "items": [
           {
