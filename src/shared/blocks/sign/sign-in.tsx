@@ -55,6 +55,19 @@ export function SignIn({
     }
   }
 
+  // better-auth may embed callbackURL into verification links without URL-encoding.
+  // If callbackURL contains its own '&' query params, the verification URL can break.
+  const sanitizeVerificationCallbackUrl = (path: string) => {
+    if (!path?.startsWith('/')) return '/';
+    const hashIdx = path.indexOf('#');
+    const noHash = hashIdx >= 0 ? path.slice(0, hashIdx) : path;
+    const qIdx = noHash.indexOf('?');
+    if (qIdx < 0) return noHash || '/';
+    const basePath = noHash.slice(0, qIdx) || '/';
+    const query = noHash.slice(qIdx + 1);
+    return query.includes('&') ? basePath : noHash;
+  };
+
   const base = locale !== defaultLocale ? `/${locale}` : '';
   const stripLocalePrefix = (path: string) => {
     if (!path?.startsWith('/')) return '/';
@@ -99,6 +112,9 @@ export function SignIn({
             const status = e?.error?.status;
             if (status === 403) {
               const normalizedCallbackUrl = stripLocalePrefix(callbackUrl);
+              const safeCallbackUrl = sanitizeVerificationCallbackUrl(
+                normalizedCallbackUrl || '/'
+              );
               const verifyPath = `/verify-email?sent=1&email=${encodeURIComponent(
                 email
               )}&callbackUrl=${encodeURIComponent(normalizedCallbackUrl)}`;
@@ -110,7 +126,7 @@ export function SignIn({
               // as the waiting UI.
               void authClient.sendVerificationEmail({
                 email,
-                callbackURL: `${base}${normalizedCallbackUrl || '/'}`,
+                callbackURL: `${base}${safeCallbackUrl}`,
               });
 
               // i18n router will prefix locale automatically; do NOT include locale here.

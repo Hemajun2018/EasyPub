@@ -82,6 +82,19 @@ export function VerifyEmailPage({
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const lastSessionCheckAtRef = useRef(0);
 
+  // better-auth may embed callbackURL into verification links without URL-encoding.
+  // If callbackURL contains its own '&' query params, the verification URL can break.
+  const sanitizeVerificationCallbackUrl = (path: string) => {
+    if (!path?.startsWith('/')) return '/';
+    const hashIdx = path.indexOf('#');
+    const noHash = hashIdx >= 0 ? path.slice(0, hashIdx) : path;
+    const qIdx = noHash.indexOf('?');
+    if (qIdx < 0) return noHash || '/';
+    const basePath = noHash.slice(0, qIdx) || '/';
+    const query = noHash.slice(qIdx + 1);
+    return query.includes('&') ? basePath : noHash;
+  };
+
   const nextUrl = useMemo(() => {
     const decoded = safeDecodeCallbackUrl(callbackUrl);
     // i18n router will prefix locale automatically; store locale-less paths
@@ -239,7 +252,7 @@ export function VerifyEmailPage({
         email,
         // IMPORTANT: callbackURL must not contain its own '&' query params.
         // After verification, send user to callbackUrl (or home). This page is just the waiting UI.
-        callbackURL: `${base}${nextUrl || '/'}`,
+        callbackURL: `${base}${sanitizeVerificationCallbackUrl(nextUrl || '/')}`,
       });
       if (result?.error) {
         toast.error(result.error.message || 'send verification email failed');
