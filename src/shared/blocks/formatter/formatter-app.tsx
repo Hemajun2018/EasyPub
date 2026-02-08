@@ -41,7 +41,7 @@ const App = () => {
   const [createTplUrl, setCreateTplUrl] = useState<string>('');
   const [createTplName, setCreateTplName] = useState<string>('');
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
-  const [createTplHtml, setCreateTplHtml] = useState<string>('');
+
   const [viewTplId, setViewTplId] = useState<string>('');
   const [viewTplName, setViewTplName] = useState<string>('');
   const [viewTplPrompt, setViewTplPrompt] = useState<string>('');
@@ -96,7 +96,7 @@ const App = () => {
       if (!resp.ok) {
         // Local dev without serverless functions → 404. Guide to fallback.
         if (resp.status === 404) {
-          throw new Error('抓取失败(404)：本地开发模式下接口不可用。请改用“从HTML创建”或在部署后再试。');
+          throw new Error('抓取失败(404)：本地开发模式下接口不可用。请在部署后再试。');
         }
         const t = await resp.text().catch(() => '');
         throw new Error(`抓取失败(${resp.status}): ${t || resp.statusText}`);
@@ -117,25 +117,6 @@ const App = () => {
     }
   };
 
-  // Create custom template directly from pasted HTML (inner of #js_content)
-  const handleCreateTemplateFromHtml = async () => {
-    const html = (createTplHtml || '').trim();
-    const name = (createTplName || '').trim();
-    if (!html || !name) { alert('请粘贴正文HTML并填写模板名称'); return; }
-    setIsCreatingTemplate(true);
-    try {
-      const analysis = await analyzeHtmlToTemplate(html);
-      if (!analysis?.prompt) throw new Error('未生成有效模板提示词');
-      const saved = templateStore.save({ name, prompt: analysis.prompt, sourceUrl: undefined, palette: analysis.palette || null, imageBlock: analysis.imageBlock || null });
-      setCustomTemplates(templateStore.list());
-      setSelectedTemplateId(saved.id);
-      alert('模板已创建并选中');
-    } catch (e) {
-      handleApiError(e);
-    } finally {
-      setIsCreatingTemplate(false);
-    }
-  };
 
   // View template prompt
   const openViewTemplatePrompt = (id: string) => {
@@ -1096,19 +1077,14 @@ const App = () => {
               <StyleSelector selected={selectedStyle} onSelect={(s) => { setSelectedStyle(s); }} />
             </div>
             <div className="pt-2 border-t border-border">
-              <h4 className="text-base font-bold mb-2">定制模板（指令）</h4>
+              <h4 className="text-base font-bold mb-2">定制模板</h4>
               <div className="space-y-2">
                 <input value={createTplUrl} onChange={(e) => setCreateTplUrl(e.target.value)} className="w-full border rounded px-2 py-1 text-sm" placeholder="粘贴微信公众号文章链接" />
                 <div className="flex gap-2">
                   <input value={createTplName} onChange={(e) => setCreateTplName(e.target.value)} className="flex-1 border rounded px-2 py-1 text-sm" placeholder="模板名称" />
                   <FormatterButton variant="secondary" onClick={handleCreateCustomTemplate} isLoading={isCreatingTemplate} className="!h-8 !py-1 !px-3 !text-xs">从链接创建</FormatterButton>
                 </div>
-                <div className="pt-2">
-                  <textarea value={createTplHtml} onChange={(e) => setCreateTplHtml(e.target.value)} className="w-full h-24 border rounded px-2 py-1 text-xs font-mono" placeholder="或：直接粘贴 #js_content 的 HTML（更稳定，避免本地404）"></textarea>
-                  <div className="flex justify-end mt-1">
-                    <FormatterButton variant="secondary" onClick={handleCreateTemplateFromHtml} isLoading={isCreatingTemplate} className="!h-8 !py-1 !px-3 !text-xs">从HTML创建</FormatterButton>
-                  </div>
-                </div>
+
                 {customTemplates.length > 0 ? (
                   <div className="mt-2">
                     <div className="text-xs text-gray-500 mb-1">我的模板</div>
