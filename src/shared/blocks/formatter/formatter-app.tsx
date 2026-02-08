@@ -35,6 +35,8 @@ const App = () => {
   const [inputText, setInputText] = useState<string>('');
   const [formattedHtml, setFormattedHtml] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<StyleType>(StyleType.MODERN_WECHAT);
+  // Tab state for template selector
+  const [activeTab, setActiveTab] = useState<'preset' | 'custom'>('preset');
   // Custom template state
   const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
@@ -1069,56 +1071,172 @@ const App = () => {
           </div>
         </section>
 
-        {/* Middle: Style Picker */}
+        {/* Middle: Style Picker with Tabs */}
         <section className="col-span-12 md:col-span-3 flex flex-col h-full bg-card rounded-xl border border-border overflow-hidden">
-          <div className="p-4 border-b border-border"><h3 className="text-lg font-bold">选择一个风格</h3></div>
-          <div className="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-6">
-            <div>
-              <StyleSelector selected={selectedStyle} onSelect={(s) => { setSelectedStyle(s); }} />
+          {/* Tab Header */}
+          <div className="border-b border-border">
+            <div className="flex">
+              <button
+                onClick={() => setActiveTab('preset')}
+                className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
+                  activeTab === 'preset'
+                    ? 'bg-primary text-primary-foreground border-b-2 border-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                }`}
+              >
+                📋 预设模板
+              </button>
+              <button
+                onClick={() => setActiveTab('custom')}
+                className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
+                  activeTab === 'custom'
+                    ? 'bg-primary text-primary-foreground border-b-2 border-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                }`}
+              >
+                🎨 我的模板
+              </button>
             </div>
-            <div className="pt-2 border-t border-border">
-              <h4 className="text-base font-bold mb-2">定制模板</h4>
-              <div className="space-y-2">
-                <input value={createTplUrl} onChange={(e) => setCreateTplUrl(e.target.value)} className="w-full border rounded px-2 py-1 text-sm" placeholder="粘贴微信公众号文章链接" />
-                <div className="flex gap-2">
-                  <input value={createTplName} onChange={(e) => setCreateTplName(e.target.value)} className="flex-1 border rounded px-2 py-1 text-sm" placeholder="模板名称" />
-                  <FormatterButton variant="secondary" onClick={handleCreateCustomTemplate} isLoading={isCreatingTemplate} className="!h-8 !py-1 !px-3 !text-xs">从链接创建</FormatterButton>
+          </div>
+
+          {/* Tab Content */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {activeTab === 'preset' && (
+              <div className="p-4">
+                <StyleSelector selected={selectedStyle} onSelect={(s) => { setSelectedStyle(s); setSelectedTemplateId(''); }} />
+              </div>
+            )}
+
+            {activeTab === 'custom' && (
+              <div className="p-4 space-y-4">
+                {/* Info Card */}
+                <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <span className="text-lg">💡</span>
+                    <div className="flex-1">
+                      <p className="text-sm text-blue-900 dark:text-blue-100 font-medium">智能学习排版风格</p>
+                      <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">从任意公众号文章中提取排版风格，AI 会分析文章的配色、字体、间距等特征</p>
+                    </div>
+                  </div>
                 </div>
 
+                {/* Create Form */}
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-muted-foreground">粘贴文章链接</label>
+                  <input
+                    value={createTplUrl}
+                    onChange={(e) => setCreateTplUrl(e.target.value)}
+                    className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="https://mp.weixin.qq.com/s/..."
+                  />
+                  <div className="flex gap-2">
+                    <input
+                      value={createTplName}
+                      onChange={(e) => setCreateTplName(e.target.value)}
+                      className="flex-1 border border-border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      placeholder="模板名称（如：科技风）"
+                    />
+                    <FormatterButton
+                      variant="secondary"
+                      onClick={handleCreateCustomTemplate}
+                      isLoading={isCreatingTemplate}
+                      className="!h-10 !px-4 !text-sm whitespace-nowrap"
+                    >
+                      ✨ 智能学习
+                    </FormatterButton>
+                  </div>
+                </div>
+
+                {/* Template List or Empty State */}
                 {customTemplates.length > 0 ? (
-                  <div className="mt-2">
-                    <div className="text-xs text-gray-500 mb-1">我的模板</div>
-                    <div className="space-y-1">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mt-4">
+                      <span className="text-sm font-semibold">📚 我的模板库</span>
+                      <span className="text-xs text-muted-foreground">({customTemplates.length})</span>
+                    </div>
+                    <div className="space-y-2">
                       {customTemplates.map(t => (
-                        <div key={t.id} className={`flex items-center justify-between border rounded px-2 py-1 ${selectedTemplateId === t.id ? 'border-primary bg-accent/50' : 'border-border'}`}>
-                          <button className="text-left text-sm truncate flex-1" onClick={() => setSelectedTemplateId(selectedTemplateId === t.id ? '' : t.id)}>
-                            {selectedTemplateId === t.id ? '✅ ' : ''}{t.name}
-                          </button>
-                          <div className="flex items-center gap-2">
-                            <button className="text-xs text-primary hover:underline" title="查看提示词" onClick={() => openViewTemplatePrompt(t.id)}>查看</button>
-                            <button className="text-xs text-muted-foreground hover:text-destructive" title="删除" onClick={() => { templateStore.remove(t.id); setCustomTemplates(templateStore.list()); if (selectedTemplateId === t.id) setSelectedTemplateId(''); }}>删除</button>
+                        <div
+                          key={t.id}
+                          className={`group relative border rounded-lg p-3 transition-all ${
+                            selectedTemplateId === t.id
+                              ? 'border-primary bg-primary/5 shadow-sm'
+                              : 'border-border hover:border-primary/50 hover:bg-accent/30'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <button
+                              className="text-left flex-1 min-w-0"
+                              onClick={() => setSelectedTemplateId(selectedTemplateId === t.id ? '' : t.id)}
+                            >
+                              <div className="flex items-center gap-2">
+                                {selectedTemplateId === t.id && <span className="text-green-600 text-sm">✅</span>}
+                                <span className="text-sm font-medium truncate">{t.name}</span>
+                              </div>
+                              {t.sourceUrl && (
+                                <p className="text-xs text-muted-foreground mt-1 truncate">
+                                  {new URL(t.sourceUrl).hostname}
+                                </p>
+                              )}
+                            </button>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <button
+                                className="text-xs px-2 py-1 text-primary hover:bg-primary/10 rounded transition-colors"
+                                title="查看提示词"
+                                onClick={() => openViewTemplatePrompt(t.id)}
+                              >
+                                查看
+                              </button>
+                              <button
+                                className="text-xs px-2 py-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"
+                                title="删除"
+                                onClick={() => {
+                                  if (confirm(`确定要删除模板「${t.name}」吗？`)) {
+                                    templateStore.remove(t.id);
+                                    setCustomTemplates(templateStore.list());
+                                    if (selectedTemplateId === t.id) setSelectedTemplateId('');
+                                  }
+                                }}
+                              >
+                                删除
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))}
                     </div>
                     {selectedTemplateId && (
-                      <div className="mt-2">
-                        <FormatterButton variant="ghost" className="!h-8 !py-1 !px-2 !text-xs" onClick={() => setSelectedTemplateId('')}>清除定制选择</FormatterButton>
-                      </div>
+                      <FormatterButton
+                        variant="ghost"
+                        className="!h-8 !text-xs w-full"
+                        onClick={() => setSelectedTemplateId('')}
+                      >
+                        清除选择
+                      </FormatterButton>
                     )}
                   </div>
                 ) : (
-                  <p className="text-xs text-gray-400">还没有定制模板，先粘贴链接创建一个。</p>
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <div className="w-16 h-16 rounded-full bg-accent/50 flex items-center justify-center mb-3">
+                      <span className="text-3xl">📝</span>
+                    </div>
+                    <p className="text-sm font-medium text-foreground mb-1">还没有自定义模板</p>
+                    <p className="text-xs text-muted-foreground">粘贴一篇你喜欢的文章链接开始创建</p>
+                  </div>
                 )}
               </div>
-            </div>
+            )}
           </div>
-          <div className="p-4 mt-auto">
+
+          {/* Footer with Action Button */}
+          <div className="p-4 border-t border-border mt-auto">
             <FormatterButton onClick={handleFormat} isLoading={isFormatting} className="flex w-full h-12 !rounded-lg font-bold">
               一键AI排版
             </FormatterButton>
             {selectedTemplateId && (
-              <p className="mt-2 text-xs text-muted-foreground">将使用定制模板「{customTemplates.find(x => x.id === selectedTemplateId)?.name || ''}」进行排版。</p>
+              <p className="mt-2 text-xs text-center text-muted-foreground">
+                使用模板：<span className="font-medium text-primary">{customTemplates.find(x => x.id === selectedTemplateId)?.name || ''}</span>
+              </p>
             )}
           </div>
         </section>
