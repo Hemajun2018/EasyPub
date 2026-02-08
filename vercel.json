@@ -9,6 +9,9 @@
     }
   },
   "functions": {
+    "src/app/api/formatter/generate/route.ts": {
+      "maxDuration": 120
+    },
     "src/app/api/**/*.ts": {
       "maxDuration": 30
     },
