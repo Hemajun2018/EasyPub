@@ -1089,7 +1089,7 @@ const App = () => {
                 onClick={() => setActiveTab('preset')}
                 className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
                   activeTab === 'preset'
-                    ? 'bg-primary text-primary-foreground border-b-2 border-primary'
+                    ? 'bg-background text-foreground border-b-2 border-border'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
               >
@@ -1100,7 +1100,7 @@ const App = () => {
                   onClick={() => setActiveTab('custom')}
                   className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
                     activeTab === 'custom'
-                      ? 'bg-primary text-primary-foreground border-b-2 border-primary'
+                      ? 'bg-background text-foreground border-b-2 border-border'
                       : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                   }`}
                 >
