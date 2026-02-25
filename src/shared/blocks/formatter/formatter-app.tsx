@@ -1354,36 +1354,83 @@ const App = () => {
                   <p className="text-sm">正在加载模板预览...</p>
                 </div>
               ) : templatePreviewHtml ? (
-                <div className="w-full max-w-[680px] mx-auto bg-white rounded-xl shadow relative">
-                  <div
-                    style={{
-                      padding: '20px 16px 40px 16px',
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif',
-                      color: '#333',
-                      backgroundColor: '#fff',
-                    }}
-                  >
-                    <div className="mb-6">
-                      <h1 className="text-[18px] font-bold leading-[1.4] mb-4 text-[#333] tracking-tighter">
-                        EasyPub：AI 驱动的智能公众号排版助手
-                      </h1>
-                      <div className="flex items-center gap-x-2 mb-3 whitespace-nowrap">
-                        <span className="bg-[#f0f0f0] text-[#888] text-[10px] px-1.5 py-0.5 rounded-sm shrink-0">
-                          原创
-                        </span>
-                        <span className="text-[#888] text-[12px] shrink-0">何慢慢</span>
-                        <span className="text-[#576b95] text-[12px] font-medium shrink-0">EasyPub</span>
-                        <span className="text-[#b2b2b2] text-[12px] shrink-0">2026-02-04 22:23</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[#b2b2b2] text-[13px]">
-                        <span>北京</span>
-                        <div className="flex items-center gap-1.5 text-[#576b95]">
-                          <span className="font-bold">2734人收听</span>
+                <div className="w-full h-full flex items-start justify-center py-1">
+                  <div className="relative w-[280px] h-[550px] bg-white rounded-[52px] border-[8px] border-[#0f172a] shadow-[0_18px_40px_rgba(15,23,42,0.22)] overflow-hidden">
+                    <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 w-[84px] h-6 bg-black rounded-full flex items-center justify-between px-3">
+                      <div className="w-1 h-1 rounded-full bg-blue-500/30" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+                    </div>
+
+                    <div className="h-7 bg-white w-full flex items-center justify-between px-7 text-[10px] font-semibold text-black pt-1.5">
+                      <span>9:41</span>
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex items-end gap-[1px]">
+                          <span className="block w-[2px] h-[4px] rounded-sm bg-black" />
+                          <span className="block w-[2px] h-[6px] rounded-sm bg-black" />
+                          <span className="block w-[2px] h-[8px] rounded-sm bg-black" />
+                          <span className="block w-[2px] h-[10px] rounded-sm bg-black" />
+                        </div>
+                        <svg className="w-3.5 h-3.5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M4 9c4.5-4 11.5-4 16 0" />
+                          <path d="M7 12c3-2.5 7-2.5 10 0" />
+                          <path d="M10 15c1.2-1 2.8-1 4 0" />
+                          <circle cx="12" cy="18" r="1.2" fill="currentColor" stroke="none" />
+                        </svg>
+                        <div className="relative w-6 h-3 border border-black rounded-[2px]">
+                          <div className="absolute right-[1px] top-[1px] h-[7px] w-[14px] rounded-[1px] bg-black" />
+                          <div className="absolute -right-[3px] top-[3px] h-[4px] w-[2px] rounded-r-sm bg-black" />
                         </div>
                       </div>
                     </div>
-                    <div dangerouslySetInnerHTML={{ __html: templatePreviewHtml }} />
+
+                    <div className="h-10 flex items-center px-4 bg-white text-black shrink-0 relative border-b border-black/5">
+                      <svg className="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      <div className="flex gap-1 ml-auto">
+                        <div className="w-[3px] h-[3px] rounded-full bg-black" />
+                        <div className="w-[3px] h-[3px] rounded-full bg-black" />
+                        <div className="w-[3px] h-[3px] rounded-full bg-black" />
+                      </div>
+                    </div>
+
+                    <div className="h-[calc(100%-68px)] overflow-y-auto custom-scrollbar bg-white">
+                      <div
+                        style={{
+                          transform: 'scale(0.55)',
+                          transformOrigin: 'top left',
+                          width: '182%',
+                          padding: '24px 20px',
+                          fontFamily:
+                            '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif',
+                          color: '#333',
+                          backgroundColor: '#fff',
+                        }}
+                      >
+                        <div className="mb-6">
+                          <h1 className="text-[18px] font-bold leading-[1.4] mb-4 text-[#333] tracking-tighter">
+                            EasyPub：AI 驱动的智能公众号排版助手
+                          </h1>
+                          <div className="flex items-center gap-x-2 mb-3 whitespace-nowrap">
+                            <span className="bg-[#f0f0f0] text-[#888] text-[10px] px-1.5 py-0.5 rounded-sm shrink-0">
+                              原创
+                            </span>
+                            <span className="text-[#888] text-[12px] shrink-0">何慢慢</span>
+                            <span className="text-[#576b95] text-[12px] font-medium shrink-0">EasyPub</span>
+                            <span className="text-[#b2b2b2] text-[12px] shrink-0">2026-02-04 22:23</span>
+                          </div>
+                          <div className="flex items-center gap-3 text-[#b2b2b2] text-[13px]">
+                            <span>北京</span>
+                            <div className="flex items-center gap-1.5 text-[#576b95]">
+                              <span className="font-bold">2734人收听</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: templatePreviewHtml }} />
+                      </div>
+                    </div>
+
+                    <div className="pointer-events-none absolute bottom-[6px] left-1/2 h-[5px] w-[118px] -translate-x-1/2 rounded-full bg-[#d4dae3]" />
                   </div>
                 </div>
               ) : (
