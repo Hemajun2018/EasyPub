@@ -30,8 +30,10 @@ function extractSessionUser(data: any): User | null {
 
 const App = () => {
   const { data: session, isPending } = useSession();
-  const { fetchConfigs, setIsShowSignModal } = useAppContext();
+  const { fetchConfigs, setIsShowSignModal, user } = useAppContext();
   const sessionUser = extractSessionUser(session);
+  const displayUser = user ?? sessionUser;
+  const canUseCustomTemplates = !!displayUser?.isAdmin;
   const [inputText, setInputText] = useState<string>('');
   const [formattedHtml, setFormattedHtml] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<StyleType>(StyleType.MODERN_WECHAT);
@@ -74,6 +76,13 @@ const App = () => {
       setCustomTemplates(templateStore.list());
     } catch {}
   }, [fetchConfigs]);
+
+  useEffect(() => {
+    if (!canUseCustomTemplates) {
+      if (activeTab === 'custom') setActiveTab('preset');
+      if (selectedTemplateId) setSelectedTemplateId('');
+    }
+  }, [canUseCustomTemplates, activeTab, selectedTemplateId]);
 
   const handleApiError = (error: any) => {
     console.error(error);
@@ -166,7 +175,7 @@ const App = () => {
       const normalized = normalizeImgTokensInText(cleaned);
       const { compressedText } = compressImgUrlTokensInText(normalized);
       // Prefer custom template when selected
-      const chosenTpl = selectedTemplateId ? templateStore.get(selectedTemplateId) : null;
+      const chosenTpl = canUseCustomTemplates && selectedTemplateId ? templateStore.get(selectedTemplateId) : null;
       if (chosenTpl) {
         const html = await formatTextWithStylePrompt(compressedText, chosenTpl.prompt);
         const out = await replaceImagePlaceholders(html, selectedStyle, chosenTpl.imageBlock || undefined);
@@ -1086,16 +1095,18 @@ const App = () => {
               >
                 📋 预设模板
               </button>
-              <button
-                onClick={() => setActiveTab('custom')}
-                className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
-                  activeTab === 'custom'
-                    ? 'bg-primary text-primary-foreground border-b-2 border-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
-                }`}
-              >
-                🎨 我的模板
-              </button>
+              {canUseCustomTemplates && (
+                <button
+                  onClick={() => setActiveTab('custom')}
+                  className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
+                    activeTab === 'custom'
+                      ? 'bg-primary text-primary-foreground border-b-2 border-primary'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                  }`}
+                >
+                  🎨 我的模板
+                </button>
+              )}
             </div>
           </div>
 
@@ -1107,7 +1118,7 @@ const App = () => {
               </div>
             )}
 
-            {activeTab === 'custom' && (
+            {canUseCustomTemplates && activeTab === 'custom' && (
               <div className="p-4 space-y-4">
                 {/* Info Card */}
                 <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
@@ -1246,7 +1257,7 @@ const App = () => {
           <div className="flex items-center justify-between p-4 border-b border-border">
             <h3 className="text-lg font-bold">排版预览</h3>
             <div className="flex items-center gap-2">
-              {sessionUser?.isAdmin && (
+              {canUseCustomTemplates && (
                 <FormatterButton
                   variant="ghost"
                   onClick={() => setShowCodeModal(true)}
