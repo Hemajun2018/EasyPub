@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import type { ClipboardEvent, DragEvent } from 'react';
 
 import { Link } from '@/core/i18n/navigation';
@@ -11,7 +11,7 @@ import { SignModal } from '@/shared/blocks/sign/sign-modal';
 import { SignUser } from '@/shared/blocks/sign/sign-user';
 import { User } from '@/shared/models/user';
 
-import { StyleType } from './types';
+import { StyleType, FORMATTING_OPTIONS } from './types';
 import { StyleSelector } from './style-selector';
 import { FormatterButton } from './formatter-button';
 import {
@@ -28,6 +28,23 @@ function extractSessionUser(data: any): User | null {
   return u && typeof u === 'object' ? (u as User) : null;
 }
 
+interface PreviewSamples {
+  article: string;
+  generatedAt: string;
+  styles: Record<string, string>;
+}
+
+function normalizeTemplatePreviewHtml(html: string): string {
+  return html
+    .replace(
+      /<(h[1-6]|p|section|div)[^>]*>(?:<[^>]+>)*\s*EasyPub[：:][\s\S]*?排版助手\s*(?:<\/[^>]+>)*<\/\1>/i,
+      ''
+    )
+    .replace(/<(section|div|p)[^>]*>\s*<\/\1>/gi, '')
+    .replace(/<section<section/gi, '<section ')
+    .replace(/margin-top:\s*-\d+(\.\d+)?em/gi, 'margin-top: 0');
+}
+
 const App = () => {
   const { data: session, isPending } = useSession();
   const { fetchConfigs, setIsShowSignModal, user } = useAppContext();
@@ -37,6 +54,9 @@ const App = () => {
   const [inputText, setInputText] = useState<string>('');
   const [formattedHtml, setFormattedHtml] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<StyleType>(StyleType.MODERN_WECHAT);
+  const [rightPanelMode, setRightPanelMode] = useState<'template-preview' | 'generated-result'>('template-preview');
+  const [previewSamples, setPreviewSamples] = useState<PreviewSamples | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(true);
   // Tab state for template selector
   const [activeTab, setActiveTab] = useState<'preset' | 'custom'>('preset');
   // Custom template state
@@ -78,11 +98,41 @@ const App = () => {
   }, [fetchConfigs]);
 
   useEffect(() => {
+    let alive = true;
+    fetch('/preview-samples.json')
+      .then((res) => res.json())
+      .then((data: PreviewSamples) => {
+        if (!alive) return;
+        setPreviewSamples(data);
+        setPreviewLoading(false);
+      })
+      .catch((error) => {
+        console.error('Failed to load formatter preview samples:', error);
+        if (!alive) return;
+        setPreviewLoading(false);
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
     if (!canUseCustomTemplates) {
       if (activeTab === 'custom') setActiveTab('preset');
       if (selectedTemplateId) setSelectedTemplateId('');
     }
   }, [canUseCustomTemplates, activeTab, selectedTemplateId]);
+
+  const selectedStyleName = useMemo(() => {
+    return FORMATTING_OPTIONS.find((x) => x.id === selectedStyle)?.name || '模板预览';
+  }, [selectedStyle]);
+
+  const templatePreviewHtml = useMemo(() => {
+    const raw = previewSamples?.styles?.[selectedStyle] || '';
+    if (!raw) return '';
+    return normalizeTemplatePreviewHtml(raw);
+  }, [previewSamples, selectedStyle]);
 
   const handleApiError = (error: any) => {
     console.error(error);
@@ -164,6 +214,7 @@ const App = () => {
       return;
     }
     if (!inputText.trim()) return;
+    setRightPanelMode('generated-result');
     setIsFormatting(true);
     startFormattingProgress(45000);
     try {
@@ -1255,13 +1306,20 @@ const App = () => {
         {/* Right: Preview */}
         <section className="col-span-12 md:col-span-5 flex flex-col h-full bg-card rounded-xl border border-border overflow-hidden">
           <div className="flex items-center justify-between p-4 border-b border-border">
-            <h3 className="text-lg font-bold">排版预览</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-bold">
+                {rightPanelMode === 'template-preview' ? '模板预览' : '排版结果'}
+              </h3>
+              {rightPanelMode === 'template-preview' && (
+                <span className="text-xs text-muted-foreground">当前风格：{selectedStyleName}</span>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               {canUseCustomTemplates && (
                 <FormatterButton
                   variant="ghost"
                   onClick={() => setShowCodeModal(true)}
-                  disabled={!formattedHtml}
+                  disabled={!formattedHtml || rightPanelMode !== 'generated-result'}
                   className="!h-10 !rounded-lg"
                 >
                   查看代码
@@ -1270,7 +1328,7 @@ const App = () => {
               <FormatterButton
                 variant="secondary"
                 onClick={handleCopyToWeChat}
-                disabled={!formattedHtml}
+                disabled={!formattedHtml || rightPanelMode !== 'generated-result'}
                 className="!h-10 !rounded-lg"
               >
                 复制到公众号
@@ -1289,7 +1347,54 @@ const App = () => {
             </div>
           )}
           <div className="flex-1 overflow-y-auto p-6 bg-background custom-scrollbar">
-            {formattedHtml ? (
+            {rightPanelMode === 'template-preview' ? (
+              previewLoading ? (
+                <div className="flex flex-col items-center justify-center h-full w-full max-w-md mx-auto text-muted-foreground">
+                  <div className="w-10 h-10 border-2 border-border border-t-primary rounded-full animate-spin mb-3" />
+                  <p className="text-sm">正在加载模板预览...</p>
+                </div>
+              ) : templatePreviewHtml ? (
+                <div className="w-full max-w-[680px] mx-auto bg-white rounded-xl shadow relative">
+                  <div
+                    style={{
+                      padding: '20px 16px 40px 16px',
+                      fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif',
+                      color: '#333',
+                      backgroundColor: '#fff',
+                    }}
+                  >
+                    <div className="mb-6">
+                      <h1 className="text-[18px] font-bold leading-[1.4] mb-4 text-[#333] tracking-tighter">
+                        EasyPub：AI 驱动的智能公众号排版助手
+                      </h1>
+                      <div className="flex items-center gap-x-2 mb-3 whitespace-nowrap">
+                        <span className="bg-[#f0f0f0] text-[#888] text-[10px] px-1.5 py-0.5 rounded-sm shrink-0">
+                          原创
+                        </span>
+                        <span className="text-[#888] text-[12px] shrink-0">何慢慢</span>
+                        <span className="text-[#576b95] text-[12px] font-medium shrink-0">EasyPub</span>
+                        <span className="text-[#b2b2b2] text-[12px] shrink-0">2026-02-04 22:23</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[#b2b2b2] text-[13px]">
+                        <span>北京</span>
+                        <div className="flex items-center gap-1.5 text-[#576b95]">
+                          <span className="font-bold">2734人收听</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div dangerouslySetInnerHTML={{ __html: templatePreviewHtml }} />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center text-gray-500 h-full w-full max-w-md mx-auto">
+                  <h4 className="text-xl font-bold mb-2">模板预览不可用</h4>
+                  <p className="text-gray-400 max-w-xs text-center">
+                    未找到对应模板数据，可运行 `pnpm preview:generate` 重新生成预览文件。
+                  </p>
+                </div>
+              )
+            ) : formattedHtml ? (
               <div className="w-full max-w-[680px] mx-auto bg-white rounded-xl shadow relative">
                 <div
                   ref={previewRef}
@@ -1308,7 +1413,11 @@ const App = () => {
                   <svg className="w-12 h-12 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                 </div>
                 <h4 className="text-xl font-bold mb-2">您的文章预览将在此呈现</h4>
-                <p className="text-gray-400 max-w-xs text-center">在左侧输入内容，选择一种风格，然后点击“一键AI排版”开始创作。</p>
+                <p className="text-gray-400 max-w-xs text-center">
+                  {isFormatting
+                    ? '正在生成排版结果，请稍候...'
+                    : '在左侧输入内容，选择一种风格，然后点击“一键AI排版”开始创作。'}
+                </p>
               </div>
             )}
           </div>
