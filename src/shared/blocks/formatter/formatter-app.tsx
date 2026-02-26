@@ -22,6 +22,7 @@ import {
 import { imageStore } from './image-store';
 import { compressImage } from './image-compressor';
 import { templateStore, CustomTemplate } from './template-store';
+import { normalizeTemplatePreviewHtml } from './preview-html';
 
 function extractSessionUser(data: any): User | null {
   const u = data?.user ?? data?.data?.user ?? null;
@@ -34,16 +35,26 @@ interface PreviewSamples {
   styles: Record<string, string>;
 }
 
-function normalizeTemplatePreviewHtml(html: string): string {
-  return html
-    .replace(
-      /<(h[1-6]|p|section|div)[^>]*>(?:<[^>]+>)*\s*EasyPub[：:][\s\S]*?排版助手\s*(?:<\/[^>]+>)*<\/\1>/i,
-      ''
-    )
-    .replace(/<(section|div|p)[^>]*>\s*<\/\1>/gi, '')
-    .replace(/<section<section/gi, '<section ')
-    .replace(/margin-top:\s*-\d+(\.\d+)?em/gi, 'margin-top: 0');
-}
+const RED_INSIGHT_PREVIEW_FALLBACK = `
+<section style="max-width: 677px; margin: 0 auto; overflow-x: hidden; background-color: rgb(255,255,255); font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; color: rgb(55,65,81);">
+  <p style="font-size: 15px; color: rgb(55,65,81); line-height: 1.8; letter-spacing: 0.5px; margin: 0 24px 20px;">这是一种偏理性表达的公众号排版方案，重点是清晰、稳态和高兼容。</p>
+  <p style="font-size: 15px; color: rgb(55,65,81); line-height: 1.8; letter-spacing: 0.5px; margin: 0 24px 20px;">你可以把核心结论放在 <span style="background: linear-gradient(120deg, rgb(255,205,210) 0%, rgba(255,255,255,0) 100%); padding: 0 4px; border-radius: 2px; font-weight: 600; color: rgb(17,24,39);">渐变高亮区域</span>，让读者快速抓住重点。</p>
+  <section style="margin: 40px 24px; text-align: center;"><section style="display: inline-block; width: 40px; height: 1px; background: rgb(229,229,229);"><span><br/></span></section></section>
+  <section style="margin: 28px 24px 16px;">
+    <section style="line-height: 1;">
+      <span style="font-size: 50px; line-height: 1; font-weight: 700; color: rgb(220,38,38); letter-spacing: -1px;">01</span>
+      <span style="display: inline-block; font-size: 10px; line-height: 2; font-weight: 700; color: rgb(239,68,68); margin-left: 8px; vertical-align: top;">○</span>
+      <span style="display: inline-block; font-size: 10px; line-height: 2; color: rgb(17,24,39); margin-left: -20px; vertical-align: bottom;">&#10022;</span>
+    </section>
+    <section style="margin-top: 6px; font-size: 28px; line-height: 1.4; font-weight: 700; color: rgb(51,51,51);">章节标题示例</section>
+  </section>
+  <p style="font-size: 15px; color: rgb(55,65,81); line-height: 1.8; letter-spacing: 0.5px; margin: 0 24px 20px;">关键词也可以使用 <span style="border-bottom: 2px solid rgb(239,68,68); font-weight: 600;">红色下划线强调</span>，但建议克制使用。</p>
+  <section style="margin: 8px 24px; padding: 12px 16px; background: rgb(250,250,250); border-radius: 8px; display: flex; align-items: flex-start; gap: 12px;">
+    <span style="width: 6px; height: 6px; background: rgb(220,38,38); border-radius: 50%; margin-top: 8px; flex-shrink: 0;"></span>
+    <p style="font-size: 14px; color: rgb(55,65,81); line-height: 1.7; margin: 0;">要点卡片使用浅灰底和红色引导点，适合列举建议与步骤。</p>
+  </section>
+</section>
+`;
 
 const App = () => {
   const { data: session, isPending } = useSession();
@@ -129,7 +140,10 @@ const App = () => {
   }, [selectedStyle]);
 
   const templatePreviewHtml = useMemo(() => {
-    const raw = previewSamples?.styles?.[selectedStyle] || '';
+    let raw = previewSamples?.styles?.[selectedStyle] || '';
+    if (!raw && selectedStyle === StyleType.RED_INSIGHT_LITE) {
+      raw = RED_INSIGHT_PREVIEW_FALLBACK;
+    }
     if (!raw) return '';
     return normalizeTemplatePreviewHtml(raw);
   }, [previewSamples, selectedStyle]);
@@ -909,6 +923,10 @@ const App = () => {
           break;
         case StyleType.CLAUDE:
           extraImg = 'box-shadow: 0 8px 32px rgba(193,95,60,0.12); border-radius: 12px;';
+          break;
+        case StyleType.RED_INSIGHT_LITE:
+          extraWrap = 'margin: 24px 24px;';
+          extraImg = 'box-shadow: 0 6px 18px rgba(0,0,0,0.08); border-radius: 10px;';
           break;
         case StyleType.ZEN:
           extraImg = 'border-radius: 0; box-shadow: none;';

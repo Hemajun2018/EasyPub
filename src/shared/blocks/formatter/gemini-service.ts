@@ -84,10 +84,173 @@ CRITICAL RULES:
 5. STRUCTURE: The output should just be the content stream, no <html> or <body> tags.
 `;
 
+export function getBuiltInStylePrompt(style: StyleType): string {
+  if (style !== StyleType.RED_INSIGHT_LITE) return '';
+
+  return `
+        STYLE TARGET: "Red Insight Lite"
+
+        HARD COMPATIBILITY RULES:
+        - INLINE CSS ONLY. Every element must use style="...".
+        - Do NOT use <style>, class, id selectors, or external CSS.
+        - Do NOT use <svg>, <canvas>, <script>, <iframe>, <video>.
+        - Do NOT use CSS grid, position: fixed/absolute/sticky, or complex transforms.
+        - Keep wrapper nesting shallow and predictable; prefer <section>/<p>/<span>.
+        - Do NOT generate bottom interaction modules like 点赞/推荐/分享.
+        - Use only content-safe structures that survive WeChat editor paste.
+
+        COLOR PALETTE:
+        - Accent Red: rgb(220, 38, 38)
+        - Main Text: rgb(55, 65, 81)
+        - Strong Text: rgb(17, 24, 39)
+        - Soft Background: rgb(250, 250, 250)
+        - Divider: rgb(229, 229, 229)
+
+        COMPONENT LIBRARY (TRIGGER-BASED):
+        1) GLOBAL CONTAINER (required once):
+           <section style="max-width: 677px; margin: 0 auto; overflow-x: hidden; background-color: rgb(255,255,255); font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; color: rgb(55,65,81);">
+
+        2) STANDARD PARAGRAPH (default):
+           <p style="font-size: 15px; color: rgb(55,65,81); line-height: 1.8; letter-spacing: 0.5px; margin: 0 24px 20px;">[Paragraph]</p>
+
+        3) NUMBERED SECTION HEADING (MANDATORY for major chapter headings):
+           - Every major chapter heading MUST use this numbered block, including short English headings like "The End".
+           - Do NOT output plain large section titles for major chapters.
+           - Number mark and star must be on ONE visual row: red number + red hollow circle + small black star.
+           - Red hollow circle should be 10px and top-aligned with the number.
+           - Black star should align with the number bottom and stay close to the number body.
+           - Implement marks with text/span only (NO image icon, NO svg icon).
+           <section style="margin: 28px 24px 16px;">
+             <section style="line-height: 1;">
+               <span style="font-size: 50px; line-height: 1; font-weight: 700; color: rgb(220,38,38); letter-spacing: -1px;">01</span>
+               <span style="display: inline-block; font-size: 10px; line-height: 2; font-weight: 700; color: rgb(239,68,68); margin-left: 8px; vertical-align: top;">○</span>
+               <span style="display: inline-block; font-size: 10px; line-height: 2; color: rgb(17,24,39); margin-left: -20px; vertical-align: bottom;">&#10022;</span>
+             </section>
+             <section style="margin-top: 6px; font-size: 28px; line-height: 1.4; font-weight: 700; color: rgb(51,51,51);">[Section Title]</section>
+           </section>
+
+        4) GRADIENT HIGHLIGHT (for key conclusions / key numbers):
+           <span style="background: linear-gradient(120deg, rgb(255,205,210) 0%, rgba(255,255,255,0) 100%); padding: 0 4px; border-radius: 2px; font-weight: 600; color: rgb(17,24,39);">[Highlight]</span>
+
+        5) RED UNDERLINE EMPHASIS (for short terms/calls):
+           <span style="border-bottom: 2px solid rgb(239,68,68); font-weight: 600;">[Keyword]</span>
+
+        6) INFO BULLET CARD (for "包括/建议/要点" lists):
+           <section style="margin: 8px 24px; padding: 12px 16px; background: rgb(250,250,250); border-radius: 8px; display: flex; align-items: flex-start; gap: 12px;">
+             <span style="width: 6px; height: 6px; background: rgb(220,38,38); border-radius: 50%; margin-top: 8px; flex-shrink: 0;"></span>
+             <p style="font-size: 14px; color: rgb(55,65,81); line-height: 1.7; margin: 0;">[Item text]</p>
+           </section>
+
+        7) COMPARISON CARD (for A vs B / before vs after):
+           - Prefer stacked cards for stability (not grid).
+           <section style="margin: 16px 24px; padding: 16px 20px; background: rgb(255,255,255); border: 1px solid rgb(229,231,235); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+             <p style="font-size: 14px; color: rgb(55,65,81); line-height: 1.7; margin: 0;">[Comparison line]</p>
+           </section>
+
+        8) FLOW CARD (for process/steps):
+           - Use simple sequential cards with text labels.
+           - No charting, no SVG, no arrows that rely on absolute positioning.
+
+        9) SECTION DIVIDER (between major chunks):
+           <section style="margin: 40px 24px; text-align: center;"><section style="display: inline-block; width: 40px; height: 1px; background: rgb(229,229,229);"><span><br/></span></section></section>
+
+        10) IMAGE TOKEN WRAPPER:
+           <section style="text-align: center; margin: 20px 0;">[[IMAGE:img-...]]</section>
+           <section style="text-align: center; margin: 20px 0;">[[URL:1]]</section>
+
+        ACTIVATION PRINCIPLES:
+        - Apply components only when content semantics trigger them.
+        - Keep the same component visually consistent across the full article.
+        - Prefer readability over decoration. Avoid over-styling dense sections.
+  `;
+}
+
+function buildRedInsightHeadingBlock(index: number, title: string): string {
+  const num = String(index).padStart(2, '0');
+  return `
+<section style="margin: 28px 24px 16px;">
+  <section style="line-height: 1;">
+    <span style="font-size: 50px; line-height: 1; font-weight: 700; color: rgb(220,38,38); letter-spacing: -1px;">${num}</span>
+    <span style="display: inline-block; font-size: 10px; line-height: 2; font-weight: 700; color: rgb(239,68,68); margin-left: 8px; vertical-align: top;">○</span>
+    <span style="display: inline-block; font-size: 10px; line-height: 2; color: rgb(17,24,39); margin-left: -20px; vertical-align: bottom;">&#10022;</span>
+  </section>
+  <section style="margin-top: 6px; font-size: 28px; line-height: 1.4; font-weight: 700; color: rgb(51,51,51);">${title}</section>
+</section>`.trim();
+}
+
+function normalizeTextContent(html: string): string {
+  return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function shouldSkipAutoNumberHeading(title: string): boolean {
+  if (title.length < 2 || title.length > 28) return true;
+  if (/[。！？!?；;，,]/.test(title)) return true;
+  if (/^(第[一二三四五六七八九十0-9]+步|坑[一二三四五六七八九十0-9]|包括|例如|比如|说明|总结)/.test(title)) return true;
+  return false;
+}
+
+function enforceRedInsightNumberedHeadings(html: string): string {
+  const numberedBlockRegex = /<section style="margin:\s*28px 24px 16px;">[\s\S]*?<span style="font-size:\s*50px;[^>]*">(\d{2})<\/span>[\s\S]*?<section style="margin-top:\s*6px;[^>]*">([\s\S]*?)<\/section>[\s\S]*?<\/section>/g;
+  const existingTitles = new Set<string>();
+  let maxNumber = 0;
+
+  for (const m of html.matchAll(numberedBlockRegex)) {
+    const n = Number(m[1]);
+    if (!Number.isNaN(n)) maxNumber = Math.max(maxNumber, n);
+    const t = normalizeTextContent(m[2] || '');
+    if (t) existingTitles.add(t);
+  }
+
+  const candidateRegex = /<section style="([^"]*)">\s*([\s\S]*?)\s*<\/section>/g;
+  const replacements: Array<{ start: number; end: number; text: string; title: string }> = [];
+
+  for (const m of html.matchAll(candidateRegex)) {
+    const full = m[0];
+    const style = m[1] || '';
+    const inner = m[2] || '';
+    const start = m.index ?? -1;
+    if (start < 0) continue;
+
+    // Only target plain large title sections.
+    const isLargeTitle = /font-size:\s*2[4-9]px|font-size:\s*3[0-2]px/i.test(style) && /font-weight:\s*(700|bold)/i.test(style);
+    if (!isLargeTitle) continue;
+
+    // Skip title row already inside numbered block.
+    const prev = html.slice(Math.max(0, start - 260), start);
+    if (/margin:\s*28px 24px 16px;/.test(prev)) continue;
+
+    const title = normalizeTextContent(inner);
+    if (!title || shouldSkipAutoNumberHeading(title) || existingTitles.has(title)) continue;
+
+    maxNumber += 1;
+    existingTitles.add(title);
+    replacements.push({
+      start,
+      end: start + full.length,
+      title,
+      text: buildRedInsightHeadingBlock(maxNumber, title),
+    });
+  }
+
+  if (replacements.length === 0) return html;
+
+  let out = '';
+  let cursor = 0;
+  for (const r of replacements) {
+    out += html.slice(cursor, r.start) + r.text;
+    cursor = r.end;
+  }
+  out += html.slice(cursor);
+  return out;
+}
+
 export const formatText = async (text: string, style: StyleType): Promise<string> => {
   let stylePrompt = "";
 
   switch (style) {
+    case StyleType.RED_INSIGHT_LITE:
+      stylePrompt = getBuiltInStylePrompt(style);
+      break;
     case StyleType.DEEP_BLUE_BRIEF:
       stylePrompt = `
         STYLE TARGET: "Deep Blue Brief / 深蓝简报风"
@@ -427,7 +590,11 @@ export const formatText = async (text: string, style: StyleType): Promise<string
 
     if (!combined) return "<p>Format generation failed.</p>";
     // Strip the sentinel before returning
-    return combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim();
+    const result = combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim();
+    if (style === StyleType.RED_INSIGHT_LITE) {
+      return enforceRedInsightNumberedHeadings(result);
+    }
+    return result;
   } catch (error) {
     console.error("Format error:", error);
     throw error;
