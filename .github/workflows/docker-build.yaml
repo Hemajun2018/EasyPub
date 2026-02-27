@@ -115,8 +115,12 @@ jobs:
             if [ -z "$GHCR_USERNAME" ] || [ -z "$GHCR_PAT" ]; then
               echo "Skip ghcr login: missing GHCR_USERNAME / GHCR_PAT (only works for public images)."
             else
-              if ! echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin; then
-                echo "Warning: ghcr login failed. Continue deployment for public images."
+              set +e
+              echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+              LOGIN_STATUS=$?
+              set -e
+              if [ "$LOGIN_STATUS" -ne 0 ]; then
+                echo "Warning: ghcr login failed with status=$LOGIN_STATUS. Continue deployment for public images."
               fi
             fi
 
