@@ -51,7 +51,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Deploy to Tencent Cloud via SSH
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.SERVER_HOST != '' && secrets.SERVER_USER != '' && secrets.SERVER_SSH_KEY != '' && secrets.DEPLOY_PATH != '' && secrets.SERVER_PORT != '' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: appleboy/ssh-action@v1.2.0
         env:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
@@ -99,9 +99,3 @@ jobs:
             fi
 
             echo "Deploy finished."
-
-      - name: Print deployment hint when skipped
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && (secrets.SERVER_HOST == '' || secrets.SERVER_USER == '' || secrets.SERVER_SSH_KEY == '' || secrets.DEPLOY_PATH == '' || secrets.SERVER_PORT == '') }}
-        run: |
-          echo "Deployment skipped because required secrets are missing: SERVER_HOST, SERVER_USER, SERVER_SSH_KEY, SERVER_PORT, DEPLOY_PATH."
-          exit 0
