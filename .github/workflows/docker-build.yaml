@@ -66,7 +66,9 @@ jobs:
           envs: DEPLOY_PATH,DEPLOY_COMPOSE_FILE,GHCR_USERNAME,GHCR_PAT
           script_stop: true
           script: |
-            set -e
+            set -euo pipefail
+            echo "Deploy user: $(whoami)"
+            echo "Deploy path: ${DEPLOY_PATH:-<empty>}"
             if [ -z "$DEPLOY_PATH" ]; then
               echo "DEPLOY_PATH is required."
               exit 1
@@ -76,26 +78,66 @@ jobs:
             fi
 
             cd "$DEPLOY_PATH"
+            if [ ! -f "$DEPLOY_COMPOSE_FILE" ]; then
+              echo "Compose file not found: $DEPLOY_PATH/$DEPLOY_COMPOSE_FILE"
+              ls -la
+              exit 1
+            fi
+
+            DOCKER_CMD=""
+            COMPOSE_IMPL=""
+            if docker ps >/dev/null 2>&1; then
+              DOCKER_CMD="docker"
+              if docker compose version >/dev/null 2>&1; then
+                COMPOSE_IMPL="docker_compose"
+              elif command -v docker-compose >/dev/null 2>&1; then
+                COMPOSE_IMPL="docker_compose_v1"
+              fi
+            elif sudo -n docker ps >/dev/null 2>&1; then
+              DOCKER_CMD="sudo -n docker"
+              if sudo -n docker compose version >/dev/null 2>&1; then
+                COMPOSE_IMPL="sudo_docker_compose"
+              elif command -v docker-compose >/dev/null 2>&1; then
+                COMPOSE_IMPL="sudo_docker_compose_v1"
+              fi
+            fi
+
+            if [ -z "$DOCKER_CMD" ] || [ -z "$COMPOSE_IMPL" ]; then
+              echo "Cannot access docker/compose with current user."
+              id || true
+              groups || true
+              exit 1
+            fi
+            echo "Docker command: $DOCKER_CMD"
+            echo "Compose implementation: $COMPOSE_IMPL"
 
             if [ -z "$GHCR_USERNAME" ] || [ -z "$GHCR_PAT" ]; then
               echo "Skip ghcr login: missing GHCR_USERNAME / GHCR_PAT (only works for public images)."
             else
-              echo "$GHCR_PAT" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+              echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin
             fi
 
-            if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
-              docker compose -f "$DEPLOY_COMPOSE_FILE" pull
-              docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
-            elif command -v docker-compose >/dev/null 2>&1; then
-              docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
-              docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
-            else
-              echo "Neither docker compose nor docker-compose is available."
-              exit 1
-            fi
+            case "$COMPOSE_IMPL" in
+              docker_compose)
+                docker compose -f "$DEPLOY_COMPOSE_FILE" pull
+                docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+                ;;
+              docker_compose_v1)
+                docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
+                docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+                ;;
+              sudo_docker_compose)
+                sudo -n docker compose -f "$DEPLOY_COMPOSE_FILE" pull
+                sudo -n docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+                ;;
+              sudo_docker_compose_v1)
+                sudo -n docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
+                sudo -n docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+                ;;
+            esac
 
-            if command -v docker >/dev/null 2>&1; then
-              docker image prune -f || true
+            if [ -n "$DOCKER_CMD" ]; then
+              $DOCKER_CMD image prune -f || true
             fi
 
             echo "Deploy finished."
