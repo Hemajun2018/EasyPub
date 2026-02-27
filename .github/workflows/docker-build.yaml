@@ -112,24 +112,22 @@ jobs:
             echo "Step: ghcr login skipped"
 
             echo "Step: compose pull & up"
-            case "$COMPOSE_IMPL" in
-              docker_compose)
-                docker compose -f "$DEPLOY_COMPOSE_FILE" pull
-                docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
-                ;;
-              docker_compose_v1)
-                docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
-                docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
-                ;;
-              sudo_docker_compose)
-                sudo -n docker compose -f "$DEPLOY_COMPOSE_FILE" pull
-                sudo -n docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
-                ;;
-              sudo_docker_compose_v1)
-                sudo -n docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
-                sudo -n docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
-                ;;
-            esac
+            if [ "$COMPOSE_IMPL" = "docker_compose" ]; then
+              docker compose -f "$DEPLOY_COMPOSE_FILE" pull
+              docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+            elif [ "$COMPOSE_IMPL" = "docker_compose_v1" ]; then
+              docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
+              docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+            elif [ "$COMPOSE_IMPL" = "sudo_docker_compose" ]; then
+              sudo -n docker compose -f "$DEPLOY_COMPOSE_FILE" pull
+              sudo -n docker compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+            elif [ "$COMPOSE_IMPL" = "sudo_docker_compose_v1" ]; then
+              sudo -n docker-compose -f "$DEPLOY_COMPOSE_FILE" pull
+              sudo -n docker-compose -f "$DEPLOY_COMPOSE_FILE" up -d --remove-orphans
+            else
+              echo "Unknown compose implementation: $COMPOSE_IMPL"
+              exit 1
+            fi
 
             if [ -n "$DOCKER_CMD" ]; then
               $DOCKER_CMD image prune -f || true
