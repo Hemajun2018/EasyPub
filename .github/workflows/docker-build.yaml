@@ -58,12 +58,13 @@ jobs:
           DEPLOY_COMPOSE_FILE: ${{ secrets.DEPLOY_COMPOSE_FILE }}
           GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          GHCR_LOGIN_REQUIRED: ${{ secrets.GHCR_LOGIN_REQUIRED }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          envs: DEPLOY_PATH,DEPLOY_COMPOSE_FILE,GHCR_USERNAME,GHCR_PAT
+          envs: DEPLOY_PATH,DEPLOY_COMPOSE_FILE,GHCR_USERNAME,GHCR_PAT,GHCR_LOGIN_REQUIRED
           script_stop: true
           script: |
             set -euo pipefail
@@ -111,17 +112,15 @@ jobs:
             echo "Docker command: $DOCKER_CMD"
             echo "Compose implementation: $COMPOSE_IMPL"
 
-            echo "Step: ghcr login"
-            if [ -z "$GHCR_USERNAME" ] || [ -z "$GHCR_PAT" ]; then
-              echo "Skip ghcr login: missing GHCR_USERNAME / GHCR_PAT (only works for public images)."
-            else
-              set +e
-              echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin
-              LOGIN_STATUS=$?
-              set -e
-              if [ "$LOGIN_STATUS" -ne 0 ]; then
-                echo "Warning: ghcr login failed with status=$LOGIN_STATUS. Continue deployment for public images."
+            echo "Step: ghcr login (optional)"
+            if [ "${GHCR_LOGIN_REQUIRED:-false}" = "true" ]; then
+              if [ -z "${GHCR_USERNAME:-}" ] || [ -z "${GHCR_PAT:-}" ]; then
+                echo "GHCR_LOGIN_REQUIRED=true but GHCR_USERNAME/GHCR_PAT is missing."
+                exit 1
               fi
+              echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+            else
+              echo "Skip ghcr login by default. Set GHCR_LOGIN_REQUIRED=true to enable."
             fi
 
             echo "Step: compose pull & up"
