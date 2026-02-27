@@ -111,12 +111,16 @@ jobs:
             echo "Docker command: $DOCKER_CMD"
             echo "Compose implementation: $COMPOSE_IMPL"
 
+            echo "Step: ghcr login"
             if [ -z "$GHCR_USERNAME" ] || [ -z "$GHCR_PAT" ]; then
               echo "Skip ghcr login: missing GHCR_USERNAME / GHCR_PAT (only works for public images)."
             else
-              echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+              if ! echo "$GHCR_PAT" | $DOCKER_CMD login ghcr.io -u "$GHCR_USERNAME" --password-stdin; then
+                echo "Warning: ghcr login failed. Continue deployment for public images."
+              fi
             fi
 
+            echo "Step: compose pull & up"
             case "$COMPOSE_IMPL" in
               docker_compose)
                 docker compose -f "$DEPLOY_COMPOSE_FILE" pull
