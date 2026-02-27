@@ -251,6 +251,66 @@ export const formatText = async (text: string, style: StyleType): Promise<string
     case StyleType.RED_INSIGHT_LITE:
       stylePrompt = getBuiltInStylePrompt(style);
       break;
+    case StyleType.ORANGE_PULSE_BRIEF:
+      stylePrompt = `
+        STYLE TARGET: "Orange Pulse Brief / 橙势简报"
+
+        HARD COMPATIBILITY RULES:
+        - INLINE CSS ONLY. Every element must use style="...".
+        - Do NOT use <style>, class, id selectors, or external CSS.
+        - Do NOT use <svg>, <canvas>, <script>, <iframe>, <video>.
+        - Do NOT generate WeChat runtime cards/components (e.g. mp-common-videosnap, mp-common-profile).
+        - Use <section>/<p>/<span> as primary tags. Keep structure simple and paste-safe.
+        - Output正文风格 only. Do NOT generate follow/appointment/recommend cards.
+
+        COLOR PALETTE:
+        - Accent Orange: rgb(255, 129, 36)
+        - Main Text: rgb(62, 62, 62)
+        - Muted Text: rgb(178, 178, 178)
+        - Deep Blue (CTA only, optional): rgb(0, 47, 167)
+        - White: rgb(255, 255, 255)
+
+        HTML TEMPLATE RULES (single root wrapper recommended):
+        1) GLOBAL CONTAINER:
+           <section style="box-sizing: border-box; font-style: normal; font-weight: 400; text-align: justify; font-size: 16px; color: rgb(62, 62, 62);">
+
+        2) STANDARD PARAGRAPH:
+           <p style="margin: 0 16px 24px; padding: 0; white-space: normal; box-sizing: border-box;">[Paragraph]</p>
+
+        3) ORANGE EMPHASIS (for key观点/结论):
+           <strong style="box-sizing: border-box;"><span style="color: rgb(255, 129, 36); box-sizing: border-box;">[Key sentence]</span></strong>
+
+        4) SECTION NUMBER BLOCK (for major chapters only):
+           <section style="margin: 32px 0 10px; box-sizing: border-box;">
+             <section style="text-align: left; font-size: 28px; color: rgb(255, 129, 36); font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif; letter-spacing: 1px; line-height: 2; margin: 0 16px; box-sizing: border-box;">
+               <strong>[01]</strong>
+             </section>
+           </section>
+
+        5) ORANGE TITLE STRIP (must follow chapter number):
+           <section style="margin: 0 0 32px; box-sizing: border-box;">
+             <p style="margin: 0 16px; padding: 0; box-sizing: border-box;">
+               <strong style="font-size: 20px; color: rgb(255, 255, 255); background-color: rgb(255, 129, 36); padding: 0 2px;">[Section Title]</strong>
+             </p>
+           </section>
+
+        6) IMAGE TOKEN WRAPPER:
+           <section style="text-align: center; margin: 24px 0; line-height: 0; box-sizing: border-box;">[[IMAGE:img-...]]</section>
+           <section style="text-align: center; margin: 24px 0; line-height: 0; box-sizing: border-box;">[[URL:1]]</section>
+
+        7) IMAGE CAPTION (optional):
+           <section style="font-size: 12px; color: rgb(178, 178, 178); line-height: 2; letter-spacing: 1px; margin: 0 16px 12px; box-sizing: border-box;">| [Caption]</section>
+
+        8) AUTHOR/EDITOR (optional, article end only):
+           <p style="text-align: right; margin: 0 16px; font-size: 12px; color: rgb(178, 178, 178); line-height: 2; box-sizing: border-box;">[文案/版面信息]</p>
+
+        ACTIVATION PRINCIPLES:
+        - Apply chapter blocks only for major段落标题, keep numbering sequential (01, 02, 03...).
+        - Keep paragraph rhythm consistent with 16px左右边距 + 24px段间距.
+        - Emphasis should be frequent but meaningful; avoid turning every sentence orange.
+        - Keep a clean editorial style; avoid decorative widgets and interactive blocks.
+      `;
+      break;
     case StyleType.DEEP_BLUE_BRIEF:
       stylePrompt = `
         STYLE TARGET: "Deep Blue Brief / 深蓝简报风"

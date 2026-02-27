@@ -1,9 +1,24 @@
 {
   "fields": {
     "email": "邮箱",
+    "current_password": "当前密码",
     "password": "密码",
     "new_password": "新密码",
     "confirm_password": "确认密码"
+  },
+  "change_password": {
+    "title": "修改密码",
+    "description": "更新你的账户密码。",
+    "buttons": {
+      "submit": "保存"
+    }
+  },
+  "messages": {
+    "current_required": "请输入当前密码",
+    "new_required": "请输入新密码",
+    "mismatch": "两次输入的密码不一致",
+    "success": "密码修改成功",
+    "failed": "密码修改失败"
   },
   "reset_password": {
     "title": "重置密码",

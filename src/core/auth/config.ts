@@ -5,6 +5,7 @@ import { getLocale } from 'next-intl/server';
 import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
+import { ResetPasswordEmail } from '@/shared/blocks/email/reset-password';
 import { VerifyEmail } from '@/shared/blocks/email/verify-email';
 import {
   getCookieFromCtx,
@@ -74,6 +75,9 @@ const authOptions = {
 export async function getAuthOptions(configs: Record<string, string>) {
   const emailVerificationEnabled =
     configs.email_verification_enabled === 'true' && !!configs.resend_api_key;
+
+  const emailAuthEnabled = configs.email_auth_enabled !== 'false';
+  const resetPasswordEnabled = emailAuthEnabled && !!configs.resend_api_key;
 
   return {
     ...authOptions,
@@ -148,10 +152,35 @@ export async function getAuthOptions(configs: Record<string, string>) {
       },
     },
     emailAndPassword: {
-      enabled: configs.email_auth_enabled !== 'false',
+      enabled: emailAuthEnabled,
       requireEmailVerification: emailVerificationEnabled,
       // Avoid creating a session immediately after sign up when verification is required.
       autoSignIn: emailVerificationEnabled ? false : true,
+      ...(resetPasswordEnabled
+        ? {
+            // better-auth will expose /forget-password and /reset-password endpoints.
+            sendResetPassword: async (
+              { user, url }: { user: any; url: string; token: string },
+              _request: Request
+            ) => {
+              const emailService = await getEmailService(configs as any);
+              const logoUrl = envConfigs.app_logo?.startsWith('http')
+                ? envConfigs.app_logo
+                : `${envConfigs.app_url}${envConfigs.app_logo?.startsWith('/') ? '' : '/'}${envConfigs.app_logo || ''}`;
+
+              await emailService.sendEmail({
+                to: user.email,
+                subject: `Reset your password - ${envConfigs.app_name}`,
+                react: ResetPasswordEmail({
+                  appName: envConfigs.app_name,
+                  logoUrl,
+                  url,
+                }),
+              });
+            },
+            resetPasswordTokenExpiresIn: 60 * 60,
+          }
+        : {}),
     },
     ...(emailVerificationEnabled
       ? {

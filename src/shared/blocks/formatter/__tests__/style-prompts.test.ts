@@ -10,6 +10,12 @@ test('should expose the new Red Insight Lite style in option list', () => {
   assert.match(option?.name || '', /红色洞察/);
 });
 
+test('should expose Orange Pulse Brief style in option list', () => {
+  const option = FORMATTING_OPTIONS.find((x) => x.id === StyleType.ORANGE_PULSE_BRIEF);
+  assert.ok(option, 'missing Orange Pulse Brief option');
+  assert.match(option?.name || '', /橙势简报/);
+});
+
 test('should provide wechat-safe stable prompt constraints for Red Insight Lite', () => {
   const prompt = getBuiltInStylePrompt(StyleType.RED_INSIGHT_LITE);
 

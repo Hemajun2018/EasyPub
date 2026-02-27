@@ -928,6 +928,10 @@ const App = () => {
           extraWrap = 'margin: 24px 24px;';
           extraImg = 'box-shadow: 0 6px 18px rgba(0,0,0,0.08); border-radius: 10px;';
           break;
+        case StyleType.ORANGE_PULSE_BRIEF:
+          extraWrap = 'margin: 24px 16px;';
+          extraImg = 'box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-radius: 0;';
+          break;
         case StyleType.ZEN:
           extraImg = 'border-radius: 0; box-shadow: none;';
           break;

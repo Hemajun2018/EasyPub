@@ -35,21 +35,39 @@ export async function POST(req: Request) {
   }
 
   try {
-    // 1. Authenticate user
-    const user = await getUserInfo();
-    if (!user) {
+    const isDev = process.env.NODE_ENV !== 'production';
+    const requireCredits =
+      process.env.FORMATTER_REQUIRE_CREDITS === 'true' ||
+      (process.env.FORMATTER_REQUIRE_CREDITS !== 'false' && !isDev);
+
+    // 1. Authenticate user (strict in production, tolerant in local dev)
+    let user: Awaited<ReturnType<typeof getUserInfo>> | null = null;
+    try {
+      user = await getUserInfo();
+    } catch (err) {
+      if (!isDev) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+        });
+      }
+      console.warn('[formatter] getUserInfo failed in dev, continue as guest:', err);
+    }
+
+    if (requireCredits && !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
       });
     }
 
-    // 2. Check credits
+    // 2. Check credits (enabled by env flag; default: production on, development off)
     const costCredits = 1;
-    const remainingCredits = await getRemainingCredits(user.id);
-    if (remainingCredits < costCredits) {
-      return new Response(JSON.stringify({ error: 'Insufficient credits' }), {
-        status: 403,
-      });
+    if (requireCredits && user) {
+      const remainingCredits = await getRemainingCredits(user.id);
+      if (remainingCredits < costCredits) {
+        return new Response(JSON.stringify({ error: 'Insufficient credits' }), {
+          status: 403,
+        });
+      }
     }
 
     const {
@@ -173,9 +191,9 @@ export async function POST(req: Request) {
       });
     }
 
-    // 3. Consume credits and record task if the first turn of generation
-    // We only consume credits on the first turn to avoid overcharging for "Continue" turns
-    if (turn === 1 || !turn) {
+    // 3. Consume credits and record task if the first turn of generation.
+    // In local development we skip billing bookkeeping to avoid blocking template debugging.
+    if ((turn === 1 || !turn) && user && requireCredits) {
       const newAITask: NewAITask = {
         id: getUuid(),
         userId: user.id,
@@ -187,7 +205,19 @@ export async function POST(req: Request) {
         status: AITaskStatus.SUCCESS,
         costCredits,
       };
-      await createAITask(newAITask);
+
+      try {
+        await createAITask(newAITask);
+      } catch (e: any) {
+        const msg = String(e?.message || '');
+        if (msg.includes('Insufficient credits')) {
+          return new Response(JSON.stringify({ error: 'Insufficient credits' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json', 'x-trace-id': trace },
+          });
+        }
+        throw e;
+      }
     }
 
     return new Response(text, {

@@ -1,5 +1,6 @@
 export enum StyleType {
   RED_INSIGHT_LITE = 'Red Insight Lite',
+  ORANGE_PULSE_BRIEF = 'Orange Pulse Brief',
   NYT = 'New York Times',
   CLAUDE = 'Claude Minimalist',
   LITERARY = 'Classic Literary',
@@ -47,6 +48,12 @@ export const FORMATTING_OPTIONS: FormattingOption[] = [
     name: '红色洞察',
     description: '红色编号标题与渐变高亮，组件化表达清晰，公众号兼容优先。',
     previewColor: 'bg-[#DC2626]',
+  },
+  {
+    id: StyleType.ORANGE_PULSE_BRIEF,
+    name: '橙势简报',
+    description: '橙色编号+橙底标题条，正文节奏强，适合观点型与商业分析类内容。',
+    previewColor: 'bg-[#ff8124]',
   },
   {
     id: StyleType.DEEP_BLUE_BRIEF,

@@ -1,9 +1,24 @@
 {
   "fields": {
     "email": "Email",
+    "current_password": "Current Password",
     "password": "Password",
     "new_password": "New Password",
     "confirm_password": "Confirm Password"
+  },
+  "change_password": {
+    "title": "Change Password",
+    "description": "Update your account password.",
+    "buttons": {
+      "submit": "Save"
+    }
+  },
+  "messages": {
+    "current_required": "Current password is required",
+    "new_required": "New password is required",
+    "mismatch": "Passwords do not match",
+    "success": "Password changed successfully",
+    "failed": "Failed to change password"
   },
   "reset_password": {
     "title": "Reset Password",
