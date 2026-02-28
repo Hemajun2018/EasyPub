@@ -53,7 +53,10 @@ export function PanelCard({
       )}
       {(content || children) && (
         <CardContent className="text-muted-foreground">
-          {content || children}
+          {content && <p>{content}</p>}
+          {children && (
+            <div className={content ? 'mt-3' : undefined}>{children}</div>
+          )}
         </CardContent>
       )}
       {buttons && buttons.length > 0 && (
