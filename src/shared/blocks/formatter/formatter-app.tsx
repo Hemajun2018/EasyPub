@@ -53,6 +53,7 @@ const App = () => {
   const { fetchConfigs, setIsShowSignModal, user, isCheckSign } =
     useAppContext();
   const displayUser = user;
+  const [hasMounted, setHasMounted] = useState(false);
   const canUseCustomTemplates = !!displayUser?.isAdmin;
   const [inputText, setInputText] = useState<string>('');
   const [formattedHtml, setFormattedHtml] = useState<string>('');
@@ -92,6 +93,10 @@ const App = () => {
   const urlToShortRef = useRef<Map<string, string>>(new Map());  // url -> shortKey
   const urlShortCounterRef = useRef<number>(1);
   const shortToLocalIdRef = useRef<Map<string, string>>(new Map()); // shortKey -> local image id
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     fetchConfigs();
@@ -1537,7 +1542,7 @@ const App = () => {
           </div>
         )}
       </main>
-      {isCheckSign && (
+      {hasMounted && isCheckSign && (
         <div className="fixed inset-0 z-[10000] bg-white flex items-center justify-center text-gray-500">加载中…</div>
       )}
       <SignModal callbackUrl="/formatter" />
