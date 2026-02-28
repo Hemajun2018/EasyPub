@@ -1,13 +1,11 @@
 import { ReactNode } from 'react';
-import { getTranslations } from 'next-intl/server';
 
 import { redirect } from '@/core/i18n/navigation';
 import { PERMISSIONS } from '@/core/rbac/permission';
-import { ConsoleLayout } from '@/shared/blocks/console/layout';
 import { getSignUser } from '@/shared/models/user';
 import { hasPermission } from '@/shared/services/rbac';
 
-export default async function ActivityLayout({
+export default async function ApiKeysLayout({
   params,
   children,
 }: {
@@ -27,24 +25,5 @@ export default async function ActivityLayout({
     redirect({ href: '/settings/profile', locale });
   }
 
-  const t = await getTranslations('activity.sidebar');
-
-  // settings title
-  const title = t('title');
-
-  // settings nav
-  const nav = t.raw('nav');
-
-  const topNav = t.raw('top_nav');
-
-  return (
-    <ConsoleLayout
-      title={title}
-      nav={nav}
-      topNav={topNav}
-      className="py-16 md:py-20"
-    >
-      {children}
-    </ConsoleLayout>
-  );
+  return <>{children}</>;
 }

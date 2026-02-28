@@ -2,14 +2,21 @@ import { getTranslations } from 'next-intl/server';
 
 import { Empty } from '@/shared/blocks/common';
 import { FormCard } from '@/shared/blocks/form';
+import { getAllConfigs } from '@/shared/models/config';
 import { getUserInfo, UpdateUser, updateUser } from '@/shared/models/user';
 import { Form as FormType } from '@/shared/types/blocks/form';
+
+import { ResetPasswordCard } from './reset-password-card';
 
 export default async function ProfilePage() {
   const user = await getUserInfo();
   if (!user) {
     return <Empty message="no auth" />;
   }
+
+  const configs = await getAllConfigs();
+  const passwordResetEnabled =
+    configs.email_auth_enabled !== 'false' && !!configs.resend_api_key;
 
   const t = await getTranslations('settings.profile');
 
@@ -77,6 +84,10 @@ export default async function ProfilePage() {
         title={t('edit.title')}
         description={t('edit.description')}
         form={form}
+      />
+      <ResetPasswordCard
+        email={user.email || ''}
+        passwordResetEnabled={passwordResetEnabled}
       />
     </div>
   );
