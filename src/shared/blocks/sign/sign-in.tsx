@@ -115,22 +115,32 @@ export function SignIn({
               const safeCallbackUrl = sanitizeVerificationCallbackUrl(
                 normalizedCallbackUrl || '/'
               );
-              const verifyPath = `/verify-email?sent=1&email=${encodeURIComponent(
+              const verifyBasePath = `/verify-email?email=${encodeURIComponent(
                 email
               )}&callbackUrl=${encodeURIComponent(normalizedCallbackUrl)}`;
 
-              // IMPORTANT:
-              // better-auth does not URL-encode callbackURL when generating the verification URL.
-              // So callbackURL must not contain its own '&' query params (or they'll get split).
-              // We send users to home/callbackUrl after verification, and keep the verify page only
-              // as the waiting UI.
-              void authClient.sendVerificationEmail({
-                email,
-                callbackURL: `${base}${safeCallbackUrl}`,
-              });
+              void (async () => {
+                // IMPORTANT:
+                // better-auth does not URL-encode callbackURL when generating the verification URL.
+                // So callbackURL must not contain its own '&' query params (or they'll get split).
+                // We send users to home/callbackUrl after verification, and keep the verify page only
+                // as the waiting UI.
+                const result = await authClient.sendVerificationEmail({
+                  email,
+                  callbackURL: `${base}${safeCallbackUrl}`,
+                });
 
-              // i18n router will prefix locale automatically; do NOT include locale here.
-              router.push(verifyPath);
+                if (result?.error) {
+                  toast.error(
+                    result.error.message || 'send verification email failed'
+                  );
+                  // i18n router will prefix locale automatically; do NOT include locale here.
+                  router.push(verifyBasePath);
+                  return;
+                }
+
+                router.push(`${verifyBasePath}&sent=1`);
+              })();
               return;
             }
 

@@ -213,7 +213,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
                   ? envConfigs.app_logo
                   : `${envConfigs.app_url}${envConfigs.app_logo?.startsWith('/') ? '' : '/'}${envConfigs.app_logo || ''}`;
                 // Avoid blocking auth response on email sending.
-                await emailService.sendEmail({
+                const result = await emailService.sendEmail({
                   to: user.email,
                   subject: `Verify your email - ${envConfigs.app_name}`,
                   react: VerifyEmail({
@@ -222,8 +222,12 @@ export async function getAuthOptions(configs: Record<string, string>) {
                     url,
                   }),
                 });
+                if (!result.success) {
+                  throw new Error(result.error || 'send verification email failed');
+                }
               } catch (e) {
                 console.log('send verification email failed:', e);
+                throw e;
               }
             },
           },

@@ -107,21 +107,31 @@ export function SignInForm({
               const safeCallbackUrl = sanitizeVerificationCallbackUrl(
                 normalizedCallbackUrl || '/'
               );
-              const verifyPath = `/verify-email?sent=1&email=${encodeURIComponent(
+              const verifyBasePath = `/verify-email?email=${encodeURIComponent(
                 email
               )}&callbackUrl=${encodeURIComponent(normalizedCallbackUrl)}`;
 
-              // IMPORTANT:
-              // callbackURL must not contain its own '&' query params, otherwise the verification
-              // URL may break. Send users to the final callback page after verification; keep
-              // /verify-email only as a waiting UI in this tab.
-              void authClient.sendVerificationEmail({
-                email,
-                callbackURL: `${base}${safeCallbackUrl}`,
-              });
+              void (async () => {
+                // IMPORTANT:
+                // callbackURL must not contain its own '&' query params, otherwise the verification
+                // URL may break. Send users to the final callback page after verification; keep
+                // /verify-email only as a waiting UI in this tab.
+                const result = await authClient.sendVerificationEmail({
+                  email,
+                  callbackURL: `${base}${safeCallbackUrl}`,
+                });
 
-              // i18n router will prefix locale automatically; do NOT include locale here.
-              router.push(verifyPath);
+                if (result?.error) {
+                  toast.error(
+                    result.error.message || 'send verification email failed'
+                  );
+                  // i18n router will prefix locale automatically; do NOT include locale here.
+                  router.push(verifyBasePath);
+                  return;
+                }
+
+                router.push(`${verifyBasePath}&sent=1`);
+              })();
               return;
             }
 

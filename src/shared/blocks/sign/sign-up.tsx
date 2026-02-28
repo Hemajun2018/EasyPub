@@ -140,19 +140,29 @@ export function SignUp({
               const safeCallbackUrl = sanitizeVerificationCallbackUrl(
                 normalizedCallbackUrl || '/'
               );
-              const verifyPath = `/verify-email?sent=1&email=${encodeURIComponent(
+              const verifyBasePath = `/verify-email?email=${encodeURIComponent(
                 email
               )}&callbackUrl=${encodeURIComponent(normalizedCallbackUrl)}`;
 
-            // IMPORTANT: callbackURL must not contain its own '&' query params.
-            // We redirect to home/callbackUrl after verification; verify page is just the waiting UI.
-              void authClient.sendVerificationEmail({
-                email,
-              callbackURL: `${base}${safeCallbackUrl}`,
-              });
+              void (async () => {
+                // IMPORTANT: callbackURL must not contain its own '&' query params.
+                // We redirect to home/callbackUrl after verification; verify page is just the waiting UI.
+                const result = await authClient.sendVerificationEmail({
+                  email,
+                  callbackURL: `${base}${safeCallbackUrl}`,
+                });
 
-              // next/navigation router expects fully qualified path (including locale when non-default)
-              router.push(`${base}${verifyPath}`);
+                if (result?.error) {
+                  toast.error(
+                    result.error.message || 'send verification email failed'
+                  );
+                  // next/navigation router expects fully qualified path (including locale when non-default)
+                  router.push(`${base}${verifyBasePath}`);
+                  return;
+                }
+
+                router.push(`${base}${verifyBasePath}&sent=1`);
+              })();
               return;
             }
 
