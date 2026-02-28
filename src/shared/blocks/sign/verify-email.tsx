@@ -137,17 +137,19 @@ export function VerifyEmailPage({
   const checkSessionAndRedirect = async () => {
     // Avoid spamming get-session (especially since we also poll cooldown timer).
     const now = Date.now();
-    if (now - lastSessionCheckAtRef.current < 800) return;
+    if (now - lastSessionCheckAtRef.current < 800) return false;
     lastSessionCheckAtRef.current = now;
 
     try {
       const { data } = await authClient.getSession();
       if (data?.user) {
         hardNavigateToNextUrl();
+        return true;
       }
     } catch {
       // ignore
     }
+    return false;
   };
 
   // If verification email link signs the user in successfully, session will exist.
@@ -171,11 +173,10 @@ export function VerifyEmailPage({
     const tick = async () => {
       if (cancelled) return;
       attempts += 1;
-      await checkSessionAndRedirect();
+      const hasSession = await checkSessionAndRedirect();
       if (attempts >= maxAttempts) return;
       // keep polling only while we're not signed in yet
-      const { data } = await authClient.getSession();
-      if (!data?.user) {
+      if (!hasSession) {
         window.setTimeout(tick, 1000);
       }
     };
@@ -274,9 +275,8 @@ export function VerifyEmailPage({
     }
     // Force a fresh session check (e.g. user verified in another tab).
     void (async () => {
-      await checkSessionAndRedirect();
-      const { data } = await authClient.getSession();
-      if (!data?.user) {
+      const hasSession = await checkSessionAndRedirect();
+      if (!hasSession) {
         // If user verified in a different browser (no shared cookies),
         // we can detect verified status and redirect them to sign-in.
         const targetEmail = String(email || '')

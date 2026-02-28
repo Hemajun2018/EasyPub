@@ -5,7 +5,7 @@ import { Fragment } from 'react/jsx-runtime';
 import { Coins, LayoutDashboard, Loader2, LogOut, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { authClient, signOut, useSession } from '@/core/auth/client';
+import { signOut, useSession } from '@/core/auth/client';
 import { Link, useRouter } from '@/core/i18n/navigation';
 import {
   Avatar,
@@ -68,9 +68,6 @@ export function SignUser({
   const sessionUser = extractSessionUser(session);
   const displayUser = (user as UserType | null) ?? sessionUser;
 
-  // In dev (React StrictMode) effects can run twice; ensure we don't spam getSession().
-  const didFallbackSyncRef = useRef(false);
-
   // one tap initialized
   const oneTapInitialized = useRef(false);
 
@@ -111,30 +108,6 @@ export function SignUser({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionUser?.id, (sessionUser as any)?.email, user?.id]);
-
-  // Fallback: if the session cookie is present but useSession lags, do a single refresh.
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (didFallbackSyncRef.current) return;
-    // Only run when useSession is done but still no user.
-    if (isPending) return;
-    if (sessionUser || user) return;
-
-    didFallbackSyncRef.current = true;
-    void (async () => {
-      try {
-        const res: any = await authClient.getSession();
-        const fresh = extractSessionUser(res?.data ?? res);
-        if (fresh?.id) {
-          setUser(fresh);
-          fetchUserInfo();
-        }
-      } catch {
-        // ignore
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending, sessionUser, user?.id]);
 
   return (
     <>

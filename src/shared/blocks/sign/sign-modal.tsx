@@ -29,10 +29,17 @@ export function SignModal({ callbackUrl = '/' }: { callbackUrl?: string }) {
   const { isShowSignModal, setIsShowSignModal } = useAppContext();
 
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const handleOpenChange = (open: boolean) => {
+    if (!open && typeof document !== 'undefined') {
+      const active = document.activeElement as HTMLElement | null;
+      active?.blur?.();
+    }
+    setIsShowSignModal(open);
+  };
 
   if (isDesktop) {
     return (
-      <Dialog open={isShowSignModal} onOpenChange={setIsShowSignModal}>
+      <Dialog open={isShowSignModal} onOpenChange={handleOpenChange}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{t('sign_in_title')}</DialogTitle>
@@ -45,7 +52,7 @@ export function SignModal({ callbackUrl = '/' }: { callbackUrl?: string }) {
   }
 
   return (
-    <Drawer open={isShowSignModal} onOpenChange={setIsShowSignModal}>
+    <Drawer open={isShowSignModal} onOpenChange={handleOpenChange}>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>{t('sign_in_title')}</DrawerTitle>

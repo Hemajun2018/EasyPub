@@ -2,6 +2,7 @@ import { oneTapClient } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 
 import { envConfigs } from '@/config';
+import { DEFAULT_AUTH_GET_SESSION_MIN_INTERVAL_MS } from '@/shared/lib/auth-session-rate-limit';
 
 function createGetSessionThrottledFetch({
   minIntervalMs,
@@ -77,7 +78,8 @@ function createGetSessionThrottledFetch({
 // Client-side throttle to avoid get-session request storms in browser.
 // Note: must be NEXT_PUBLIC_* to be inlined into client bundles.
 const AUTH_GET_SESSION_MIN_INTERVAL_MS =
-  Number(process.env.NEXT_PUBLIC_AUTH_GET_SESSION_MIN_INTERVAL_MS) || 500;
+  Number(process.env.NEXT_PUBLIC_AUTH_GET_SESSION_MIN_INTERVAL_MS) ||
+  DEFAULT_AUTH_GET_SESSION_MIN_INTERVAL_MS;
 
 // create default auth client, without plugins
 export const authClient = createAuthClient({

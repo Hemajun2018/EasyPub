@@ -5,11 +5,9 @@ import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import type { ClipboardEvent, DragEvent } from 'react';
 
 import { Link } from '@/core/i18n/navigation';
-import { signOut, useSession } from '@/core/auth/client';
 import { useAppContext } from '@/shared/contexts/app';
 import { SignModal } from '@/shared/blocks/sign/sign-modal';
 import { SignUser } from '@/shared/blocks/sign/sign-user';
-import { User } from '@/shared/models/user';
 
 import { StyleType, FORMATTING_OPTIONS } from './types';
 import { StyleSelector } from './style-selector';
@@ -23,11 +21,6 @@ import { imageStore } from './image-store';
 import { compressImage } from './image-compressor';
 import { templateStore, CustomTemplate } from './template-store';
 import { normalizeTemplatePreviewHtml } from './preview-html';
-
-function extractSessionUser(data: any): User | null {
-  const u = data?.user ?? data?.data?.user ?? null;
-  return u && typeof u === 'object' ? (u as User) : null;
-}
 
 interface PreviewSamples {
   article: string;
@@ -57,10 +50,9 @@ const RED_INSIGHT_PREVIEW_FALLBACK = `
 `;
 
 const App = () => {
-  const { data: session, isPending } = useSession();
-  const { fetchConfigs, setIsShowSignModal, user } = useAppContext();
-  const sessionUser = extractSessionUser(session);
-  const displayUser = user ?? sessionUser;
+  const { fetchConfigs, setIsShowSignModal, user, isCheckSign } =
+    useAppContext();
+  const displayUser = user;
   const canUseCustomTemplates = !!displayUser?.isAdmin;
   const [inputText, setInputText] = useState<string>('');
   const [formattedHtml, setFormattedHtml] = useState<string>('');
@@ -223,7 +215,11 @@ const App = () => {
 
   // Handlers
   const handleFormat = async () => {
-    if (!sessionUser) {
+    if (isCheckSign) {
+      return;
+    }
+
+    if (!displayUser) {
       setIsShowSignModal(true);
       return;
     }
@@ -1138,7 +1134,7 @@ const App = () => {
               <p className="text-base font-medium pb-3">在此处粘贴您的文章内容...</p>
               <textarea
                 className="form-input flex w-full flex-1 resize-none overflow-auto rounded-lg focus:outline-0 focus:ring-0 border border-border bg-background focus:border-primary placeholder:text-muted-foreground p-4 text-base leading-relaxed custom-scrollbar"
-                placeholder="开始你的创作之旅，将文字粘贴于此，让AI赋予它新的生命。"
+                placeholder="开始你的创作之旅，将文字粘贴于此，让AI赋予它新的生命！"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onPaste={handlePaste}
@@ -1541,7 +1537,7 @@ const App = () => {
           </div>
         )}
       </main>
-      {isPending && (
+      {isCheckSign && (
         <div className="fixed inset-0 z-[10000] bg-white flex items-center justify-center text-gray-500">加载中…</div>
       )}
       <SignModal callbackUrl="/formatter" />
