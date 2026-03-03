@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { FORMATTING_OPTIONS, StyleType } from '../types';
-import { getBuiltInStylePrompt } from '../gemini-service';
+import { getBuiltInStylePrompt, postProcessRedInsightHtml } from '../gemini-service';
 
 test('should expose the new Red Insight Lite style in option list', () => {
   const option = FORMATTING_OPTIONS.find((x) => x.id === StyleType.RED_INSIGHT_LITE);
@@ -44,7 +44,35 @@ test('should provide wechat-safe stable prompt constraints for Red Insight Lite'
   assert.match(prompt, /vertical-align:\s*bottom/i);
   assert.match(prompt, /margin-left:\s*8px/i);
   assert.match(prompt, /margin-left:\s*-20px/i);
+  assert.match(prompt, /SUBSECTION HEADING/i);
+  assert.match(prompt, /Understand article structure first/i);
+  assert.match(prompt, /Major chapters => numbered heading block/i);
+  assert.match(prompt, /Subtopics inside a chapter => subsection heading block/i);
   assert.match(prompt, /GRADIENT HIGHLIGHT/i);
+});
+
+test('should only promote title-like red highlights to subsection headings', () => {
+  const input = `
+<section style="max-width: 677px;">
+  <section style="margin: 28px 24px 16px;">
+    <section style="line-height: 1;">
+      <span style="font-size: 50px; line-height: 1; font-weight: 700; color: rgb(220,38,38); letter-spacing: -1px;">01</span>
+      <span style="display: inline-block; font-size: 10px; line-height: 2; font-weight: 700; color: rgb(239,68,68); margin-left: 8px; vertical-align: top;">○</span>
+      <span style="display: inline-block; font-size: 10px; line-height: 2; color: rgb(17,24,39); margin-left: -20px; vertical-align: bottom;">&#10022;</span>
+    </section>
+    <section style="margin-top: 6px; font-size: 28px; line-height: 1.4; font-weight: 700; color: rgb(51,51,51);">核心优势</section>
+  </section>
+  <p style="margin: 0 24px 10px;"><span style="background: linear-gradient(120deg, rgb(255,205,210) 0%, rgba(255,255,255,0) 100%);">AI 语义级排版</span></p>
+  <p style="font-size: 15px; color: rgb(55,65,81); line-height: 1.8; letter-spacing: 0.5px; margin: 0 24px 20px;">段落A</p>
+  <p style="margin: 0 24px 10px;"><span style="background: linear-gradient(120deg, rgb(255,205,210) 0%, rgba(255,255,255,0) 100%);">这是一句带标点的强调，不应提升。</span></p>
+  <p style="font-size: 15px; color: rgb(55,65,81); line-height: 1.8; letter-spacing: 0.5px; margin: 0 24px 20px;">段落B</p>
+</section>`;
+
+  const out = postProcessRedInsightHtml(input);
+  assert.match(out, /font-size:\s*22px/);
+  assert.match(out, />AI 语义级排版<\/section>/);
+  assert.match(out, /这是一句带标点的强调，不应提升。/);
+  assert.match(out, /<p style="margin: 0 24px 10px;">\s*<span style="background: linear-gradient\(120deg, rgb\(255,205,210\) 0%, rgba\(255,255,255,0\) 100%\);">这是一句带标点的强调，不应提升。<\/span>\s*<\/p>/);
 });
 
 test('should provide 36Kr style prompt with direct numbered heading constraints', () => {

@@ -129,36 +129,46 @@ export function getBuiltInStylePrompt(style: StyleType): string {
              <section style="margin-top: 6px; font-size: 28px; line-height: 1.4; font-weight: 700; color: rgb(51,51,51);">[Section Title]</section>
            </section>
 
-        4) GRADIENT HIGHLIGHT (for key conclusions / key numbers):
+        4) SUBSECTION HEADING (semantic H2 under a major numbered chapter):
+           - Use this when a short phrase introduces a new subtopic under the current major chapter.
+           - Keep it text-driven and lightweight. Do NOT force for every paragraph.
+           <section style="margin: 0 24px 10px; font-size: 22px; line-height: 1.5; font-weight: 700; color: rgb(17,24,39);">[Subsection Title]</section>
+
+        5) GRADIENT HIGHLIGHT (for key conclusions / key numbers):
            <span style="background: linear-gradient(120deg, rgb(255,205,210) 0%, rgba(255,255,255,0) 100%); padding: 0 4px; border-radius: 2px; font-weight: 600; color: rgb(17,24,39);">[Highlight]</span>
 
-        5) RED UNDERLINE EMPHASIS (for short terms/calls):
+        6) RED UNDERLINE EMPHASIS (for short terms/calls):
            <span style="border-bottom: 2px solid rgb(239,68,68); font-weight: 600;">[Keyword]</span>
 
-        6) INFO BULLET CARD (for "包括/建议/要点" lists):
+        7) INFO BULLET CARD (for "包括/建议/要点" lists):
            <section style="margin: 8px 24px; padding: 12px 16px; background: rgb(250,250,250); border-radius: 8px; display: flex; align-items: flex-start; gap: 12px;">
              <span style="width: 6px; height: 6px; background: rgb(220,38,38); border-radius: 50%; margin-top: 8px; flex-shrink: 0;"></span>
              <p style="font-size: 14px; color: rgb(55,65,81); line-height: 1.7; margin: 0;">[Item text]</p>
            </section>
 
-        7) COMPARISON CARD (for A vs B / before vs after):
+        8) COMPARISON CARD (for A vs B / before vs after):
            - Prefer stacked cards for stability (not grid).
            <section style="margin: 16px 24px; padding: 16px 20px; background: rgb(255,255,255); border: 1px solid rgb(229,231,235); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
              <p style="font-size: 14px; color: rgb(55,65,81); line-height: 1.7; margin: 0;">[Comparison line]</p>
            </section>
 
-        8) FLOW CARD (for process/steps):
+        9) FLOW CARD (for process/steps):
            - Use simple sequential cards with text labels.
            - No charting, no SVG, no arrows that rely on absolute positioning.
 
-        9) SECTION DIVIDER (between major chunks):
+        10) SECTION DIVIDER (between major chunks):
            <section style="margin: 40px 24px; text-align: center;"><section style="display: inline-block; width: 40px; height: 1px; background: rgb(229,229,229);"><span><br/></span></section></section>
 
-        10) IMAGE TOKEN WRAPPER:
+        11) IMAGE TOKEN WRAPPER:
            <section style="text-align: center; margin: 20px 0;">[[IMAGE:img-...]]</section>
            <section style="text-align: center; margin: 20px 0;">[[URL:1]]</section>
 
         ACTIVATION PRINCIPLES:
+        - Understand article structure first, then choose components. Keep style adaptive to the source content.
+        - Enforce heading hierarchy semantically:
+          * Major chapters => numbered heading block (H1-level visual role)
+          * Subtopics inside a chapter => subsection heading block (H2-level visual role)
+          * Body statements/keywords => gradient highlight or underline, NOT heading blocks
         - Apply components only when content semantics trigger them.
         - Keep the same component visually consistent across the full article.
         - Prefer readability over decoration. Avoid over-styling dense sections.
@@ -246,6 +256,51 @@ function shouldSkipAutoNumberHeading(title: string): boolean {
   if (/[。！？!?；;，,]/.test(title)) return true;
   if (/^(第[一二三四五六七八九十0-9]+步|坑[一二三四五六七八九十0-9]|包括|例如|比如|说明|总结)/.test(title)) return true;
   return false;
+}
+
+function shouldPromoteToRedSubheading(title: string): boolean {
+  const compact = title.replace(/\s+/g, '').trim();
+  if (compact.length < 2 || compact.length > 18) return false;
+  if (/[。！？!?；;，,：:]/.test(compact)) return false;
+  if (/^(第[一二三四五六七八九十0-9]+步|包括|例如|比如|说明|总结|结论|附录)/.test(compact)) return false;
+  return true;
+}
+
+function buildRedInsightSubheadingBlock(title: string): string {
+  return `<section style="margin: 0 24px 10px; font-size: 22px; line-height: 1.5; font-weight: 700; color: rgb(17,24,39);">${title}</section>`;
+}
+
+function enforceRedInsightSubsectionHeadings(html: string): string {
+  const candidateRegex =
+    /<p style="[^"]*margin:\s*0 24px 10px;[^"]*">\s*<span style="[^"]*linear-gradient[^"]*">([\s\S]*?)<\/span>\s*<\/p>\s*(?=<p style="[^"]*font-size:\s*15px[^"]*margin:\s*0 24px 20px;)/g;
+
+  let out = '';
+  let cursor = 0;
+
+  for (const m of html.matchAll(candidateRegex)) {
+    const full = m[0];
+    const titleRaw = m[1] || '';
+    const start = m.index ?? -1;
+    if (start < 0) continue;
+
+    const title = normalizeTextContent(titleRaw);
+    if (!shouldPromoteToRedSubheading(title)) continue;
+
+    const prevWindow = html.slice(Math.max(0, start - 1600), start);
+    const hasRecentMajorHeading = /margin:\s*28px 24px 16px;/.test(prevWindow);
+    if (!hasRecentMajorHeading) continue;
+
+    out += html.slice(cursor, start) + buildRedInsightSubheadingBlock(title);
+    cursor = start + full.length;
+  }
+
+  if (!out) return html;
+  out += html.slice(cursor);
+  return out;
+}
+
+export function postProcessRedInsightHtml(html: string): string {
+  return enforceRedInsightSubsectionHeadings(enforceRedInsightNumberedHeadings(html));
 }
 
 function enforceRedInsightNumberedHeadings(html: string): string {
@@ -714,7 +769,7 @@ export const formatText = async (text: string, style: StyleType): Promise<string
     // Strip the sentinel before returning
     const result = combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim();
     if (style === StyleType.RED_INSIGHT_LITE) {
-      return enforceRedInsightNumberedHeadings(result);
+      return postProcessRedInsightHtml(result);
     }
     return result;
   } catch (error) {
