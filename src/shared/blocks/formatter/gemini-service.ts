@@ -198,7 +198,7 @@ export function getBuiltInStylePrompt(style: StyleType): string {
            - The number line and title line should use the same serif font family.
            - Do NOT use image/icon/svg for numbering.
            <section style="text-align: center; margin-top: 48px; margin-bottom: 8px; line-height: 1;">
-             <section style="line-height: 1; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', 'Source Han Serif SC', serif; font-weight: 700; color: rgb(0, 52, 198); letter-spacing: 0.5px; display: inline-flex; align-items: flex-end;">
+             <section style="line-height: 1; font-family: 'Bodoni 72', 'Bodoni MT', Didot, 'Times New Roman', serif; font-weight: 500; color: rgb(0, 52, 198); letter-spacing: 0.5px; display: inline-flex; align-items: flex-end;">
                <span style="display: inline-block; font-size: 56px; font-style: normal; line-height: 1; transform: translateY(-4px);">0</span>
                <span style="display: inline-block; font-size: 78px; font-style: normal; line-height: 1; margin-left: 2px;">1</span>
              </section>

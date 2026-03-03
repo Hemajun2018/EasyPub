@@ -220,6 +220,8 @@ const App = () => {
 
   // Handlers
   const handleFormat = async () => {
+    if (isFormatting) return;
+
     if (isCheckSign) {
       return;
     }
@@ -230,6 +232,8 @@ const App = () => {
     }
     if (!inputText.trim()) return;
     setRightPanelMode('generated-result');
+    // Clear previous preview immediately to avoid flashing old article while regenerating.
+    setFormattedHtml('');
     setIsFormatting(true);
     startFormattingProgress(45000);
     try {

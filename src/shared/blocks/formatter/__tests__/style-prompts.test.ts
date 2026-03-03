@@ -61,7 +61,9 @@ test('should provide 36Kr style prompt with direct numbered heading constraints'
   assert.match(prompt, /same serif font family/i);
   assert.match(prompt, /align-items:\s*flex-end/i);
   assert.match(prompt, /translateY\(-4px\)/i);
-  assert.match(prompt, /Songti SC/i);
+  assert.match(prompt, /Bodoni 72/i);
+  assert.match(prompt, /Bodoni MT/i);
+  assert.match(prompt, /Didot/i);
   assert.match(prompt, /Each major heading must appear exactly once/i);
   assert.match(prompt, /color:\s*rgb\(0,\s*52,\s*198\)/i);
   assert.match(prompt, /background-color:\s*rgb\(214,\s*214,\s*214\)/i);
