@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FORMATTING_OPTIONS } from '@/shared/blocks/formatter/types';
+import { normalizeHeroPreviewHtml } from '@/themes/default/blocks/hero-preview-html';
 
 // Type for the generated preview samples
 interface PreviewSamples {
@@ -39,6 +40,10 @@ export function HeroPreview() {
 
   const currentStyle = FORMATTING_OPTIONS[currentStyleIndex];
   const currentFormattedContent = samples?.styles[currentStyle.id] || '';
+  const normalizedFormattedContent = useMemo(
+    () => normalizeHeroPreviewHtml(currentFormattedContent),
+    [currentFormattedContent]
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -173,14 +178,9 @@ export function HeroPreview() {
                     </div>
 
                     {/* Render real formatted content */}
-                    {/* We remove the first title if it exists in the content to avoid duplication */}
                       <div 
                         dangerouslySetInnerHTML={{ 
-                          __html: currentFormattedContent
-                            // Removing any block (h1-h6, p, section, div) that contains the main title text
-                            .replace(/<(h[1-6]|p|section|div)[^>]*>(?:<[^>]+>)*\s*EasyPub[：:][\s\S]*?排版助手\s*(?:<\/[^>]+>)*<\/\1>/i, '')
-                          .replace(/<(section|div|p)[^>]*>\s*<\/\1>/gi, '') // Clean up empty containers
-                          .replace(/margin-top:\s*-\d+(\.\d+)?em/gi, 'margin-top: 0') // Fix overlap for specific styles like "Logic Thinking"
+                          __html: normalizedFormattedContent
                         }}
                       />
                   </div>
