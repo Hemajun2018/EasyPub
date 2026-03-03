@@ -85,9 +85,9 @@ CRITICAL RULES:
 `;
 
 export function getBuiltInStylePrompt(style: StyleType): string {
-  if (style !== StyleType.RED_INSIGHT_LITE) return '';
-
-  return `
+  switch (style) {
+    case StyleType.RED_INSIGHT_LITE:
+      return `
         STYLE TARGET: "Red Insight Lite"
 
         HARD COMPATIBILITY RULES:
@@ -163,6 +163,65 @@ export function getBuiltInStylePrompt(style: StyleType): string {
         - Keep the same component visually consistent across the full article.
         - Prefer readability over decoration. Avoid over-styling dense sections.
   `;
+    case StyleType.KR_36_FEATURE_BLUE:
+      return `
+        STYLE TARGET: "36Kr Feature Blue"
+
+        HARD COMPATIBILITY RULES:
+        - INLINE CSS ONLY. Every element must use style="...".
+        - Do NOT use <style>, class, id selectors, or external CSS.
+        - Do NOT use <svg>, <canvas>, <script>, <iframe>, <video>.
+        - Do NOT use images as heading numbers.
+        - Keep wrapper nesting shallow and predictable; prefer <section>/<p>/<span>.
+        - Do NOT generate bottom interaction modules like 点赞/推荐/分享.
+        - Use only content-safe structures that survive WeChat editor paste.
+
+        COLOR PALETTE:
+        - Accent Blue: rgb(0, 52, 198)
+        - Main Text: rgb(62, 62, 62)
+        - Muted Text: rgb(102, 102, 102)
+        - Caption Background: rgb(214, 214, 214)
+        - White: rgb(255, 255, 255)
+
+        COMPONENT LIBRARY (TRIGGER-BASED):
+        1) GLOBAL CONTAINER (required once):
+           <section style="font-size: 15px; line-height: 1.75; letter-spacing: 0.5px; color: rgb(62, 62, 62); text-align: justify; font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; background-color: rgb(255, 255, 255);">
+
+        2) STANDARD PARAGRAPH (default):
+           <p style="margin: 0 16px 24px; line-height: 1.75; color: rgb(62, 62, 62); font-size: 15px; letter-spacing: 0.5px;">[Paragraph]</p>
+
+        3) NUMBERED SECTION HEADING (MANDATORY for major chapter headings):
+           - Every major chapter heading MUST use this exact two-line heading structure.
+           - Heading numbers must be text only, sequentially incremented as 01, 02, 03.
+           - The first digit must be visually smaller than the second digit (e.g. "0" smaller, "1" larger).
+           - The two digits must align on the same bottom baseline.
+           - The number line and title line should use the same serif font family.
+           - Do NOT use image/icon/svg for numbering.
+           <section style="text-align: center; margin-top: 48px; margin-bottom: 8px; line-height: 1;">
+             <section style="line-height: 1; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', 'Source Han Serif SC', serif; font-weight: 700; color: rgb(0, 52, 198); letter-spacing: 0.5px; display: inline-flex; align-items: flex-end;">
+               <span style="display: inline-block; font-size: 56px; font-style: normal; line-height: 1; transform: translateY(-4px);">0</span>
+               <span style="display: inline-block; font-size: 78px; font-style: normal; line-height: 1; margin-left: 2px;">1</span>
+             </section>
+             <section style="margin-top: 8px; font-size: 20px; line-height: 1.6; color: rgb(0, 52, 198); font-weight: 700; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', 'Source Han Serif SC', serif;">章节标题</section>
+           </section>
+
+        4) IMAGE TOKEN WRAPPER:
+           <section style="text-align: center; margin: 24px 16px 8px; line-height: 0;">[[IMAGE:img-...]]</section>
+           <section style="text-align: center; margin: 24px 16px 8px; line-height: 0;">[[URL:1]]</section>
+
+        5) IMAGE CAPTION BAR (optional):
+           <p style="margin: 0 16px 24px; line-height: 1.4;"><span style="background-color: rgb(214, 214, 214); font-size: 13px; letter-spacing: 0.5px; color: rgb(62, 62, 62);">[Caption Text]</span></p>
+
+        ACTIVATION PRINCIPLES:
+        - Apply numbered headings only for major chapter titles.
+        - Keep all major chapter numbering continuous and stable from top to bottom.
+        - Each major heading must appear exactly once; do not repeat the same heading text in adjacent lines.
+        - Keep typography and spacing consistent across the whole article.
+        - Avoid decorative widgets and complex layout tricks that may break in WeChat.
+      `;
+    default:
+      return '';
+  }
 }
 
 function buildRedInsightHeadingBlock(index: number, title: string): string {
@@ -249,6 +308,9 @@ export const formatText = async (text: string, style: StyleType): Promise<string
 
   switch (style) {
     case StyleType.RED_INSIGHT_LITE:
+      stylePrompt = getBuiltInStylePrompt(style);
+      break;
+    case StyleType.KR_36_FEATURE_BLUE:
       stylePrompt = getBuiltInStylePrompt(style);
       break;
     case StyleType.ORANGE_PULSE_BRIEF:

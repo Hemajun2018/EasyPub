@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
 const EVOLINK_BASE = 'https://api.evolink.ai/v1beta';
+const DEFAULT_FORMATTER_MODEL = 'gemini-3-flash-preview';
 
 async function fetchWithTimeout(
   url: string,
@@ -27,6 +28,8 @@ async function fetchWithTimeout(
 
 export async function POST(req: Request) {
   const apiKey = process.env.EVOLINK_API_KEY || process.env.API_KEY;
+  const formatterModel =
+    process.env.FORMATTER_GEMINI_MODEL || DEFAULT_FORMATTER_MODEL;
   if (!apiKey) {
     return new Response(
       JSON.stringify({ error: 'Missing EVOLINK_API_KEY on server' }),
@@ -111,7 +114,7 @@ export async function POST(req: Request) {
     let resp: Response;
     try {
       resp = await fetchWithTimeout(
-        `${EVOLINK_BASE}/models/gemini-2.5-flash:generateContent`,
+        `${EVOLINK_BASE}/models/${formatterModel}:generateContent`,
         {
           method: 'POST',
           headers: {
@@ -199,7 +202,7 @@ export async function POST(req: Request) {
         userId: user.id,
         mediaType: 'text',
         provider: 'gemini',
-        model: 'gemini-2.5-flash',
+        model: formatterModel,
         prompt: userText || (contents?.[0]?.parts?.[0]?.text) || 'AI Typesetting',
         scene: 'formatter',
         status: AITaskStatus.SUCCESS,

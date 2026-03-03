@@ -933,6 +933,10 @@ const App = () => {
           extraWrap = 'margin: 24px 16px;';
           extraImg = 'box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-radius: 0;';
           break;
+        case StyleType.KR_36_FEATURE_BLUE:
+          extraWrap = 'margin: 24px 16px 8px;';
+          extraImg = 'box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-radius: 0;';
+          break;
         case StyleType.ZEN:
           extraImg = 'border-radius: 0; box-shadow: none;';
           break;

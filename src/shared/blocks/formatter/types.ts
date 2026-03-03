@@ -1,6 +1,7 @@
 export enum StyleType {
   RED_INSIGHT_LITE = 'Red Insight Lite',
   ORANGE_PULSE_BRIEF = 'Orange Pulse Brief',
+  KR_36_FEATURE_BLUE = '36Kr Feature Blue',
   NYT = 'New York Times',
   CLAUDE = 'Claude Minimalist',
   LITERARY = 'Classic Literary',
@@ -60,6 +61,12 @@ export const FORMATTING_OPTIONS: FormattingOption[] = [
     name: '深蓝简报',
     description: '深蓝主色搭配金色点缀，编号条与内容淡蓝背景，沉稳清晰。',
     previewColor: 'bg-[#0762D2]',
+  },
+  {
+    id: StyleType.KR_36_FEATURE_BLUE,
+    name: '36氪深蓝',
+    description: '36kr 媒体蓝调，一级标题双行编号，新闻杂志感强且适配公众号。',
+    previewColor: 'bg-[#0034C6]',
   },
   {
     id: StyleType.TECH_MAG,
