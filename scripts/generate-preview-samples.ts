@@ -73,7 +73,16 @@ import { formatText } from '../src/shared/blocks/formatter/gemini-service';
 const SAMPLE_ARTICLE_PATH = path.join(__dirname, 'sample-article.txt');
 const OUTPUT_PATH = path.join(__dirname, '../public/preview-samples.json');
 
+function getStyleArg(): string | null {
+  const argv = process.argv.slice(2);
+  const styleIndex = argv.findIndex((x) => x === '--style');
+  if (styleIndex === -1) return null;
+  return (argv[styleIndex + 1] || '').trim() || null;
+}
+
 async function generatePreviews() {
+  const styleArg = getStyleArg();
+
   console.log('📖 Reading sample article...');
   if (!fs.existsSync(SAMPLE_ARTICLE_PATH)) {
     console.error('❌ Error: Sample article not found at', SAMPLE_ARTICLE_PATH);
@@ -83,10 +92,36 @@ async function generatePreviews() {
   
   console.log('🎨 Generating formatted previews using actual application logic...\n');
   
-  const results: Record<string, string> = {};
-  
-  // We'll iterate through all styles defined in the application
-  for (const option of FORMATTING_OPTIONS) {
+  let existingStyles: Record<string, string> = {};
+  if (fs.existsSync(OUTPUT_PATH)) {
+    try {
+      const existing = JSON.parse(fs.readFileSync(OUTPUT_PATH, 'utf-8'));
+      if (existing && typeof existing === 'object' && existing.styles && typeof existing.styles === 'object') {
+        existingStyles = existing.styles as Record<string, string>;
+      }
+    } catch {}
+  }
+
+  let optionsToGenerate = FORMATTING_OPTIONS;
+  if (styleArg) {
+    const key = styleArg.toLowerCase();
+    optionsToGenerate = FORMATTING_OPTIONS.filter(
+      (opt) => opt.id.toLowerCase() === key || opt.name.toLowerCase() === key
+    );
+    if (optionsToGenerate.length === 0) {
+      console.error(`❌ Error: 未找到风格 "${styleArg}"。可用风格:`);
+      for (const opt of FORMATTING_OPTIONS) {
+        console.error(`- ${opt.name} (${opt.id})`);
+      }
+      process.exit(1);
+    }
+    console.log(`🎯 仅生成风格: ${optionsToGenerate.map((x) => `${x.name} (${x.id})`).join(', ')}\n`);
+  }
+
+  const results: Record<string, string> = { ...existingStyles };
+
+  // Iterate through selected styles
+  for (const option of optionsToGenerate) {
     console.log(`⏳ Formatting: ${option.name} (${option.id})...`);
     
     try {
