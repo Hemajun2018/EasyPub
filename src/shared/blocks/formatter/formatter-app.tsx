@@ -107,7 +107,7 @@ const App = () => {
 
   useEffect(() => {
     let alive = true;
-    fetch('/preview-samples.json')
+    fetch(`/preview-samples.json?ts=${Date.now()}`, { cache: 'no-store' })
       .then((res) => res.json())
       .then((data: PreviewSamples) => {
         if (!alive) return;

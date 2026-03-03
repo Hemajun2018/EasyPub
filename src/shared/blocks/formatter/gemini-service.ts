@@ -258,6 +258,76 @@ function shouldSkipAutoNumberHeading(title: string): boolean {
   return false;
 }
 
+function sanitizeFormatterHtml(raw: string): string {
+  let html = String(raw || '').trim();
+  if (!html) return html;
+
+  // Strip accidental markdown fences if model emits them.
+  html = html
+    .replace(/^```(?:html)?\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  // Prefer a likely root wrapper section (with typography-related styles),
+  // which avoids prompt-echo fragments such as "...prompt says... <section ...>".
+  const sectionTag = /<section\b[^>]*>/gi;
+  let bestStart = -1;
+  let bestScore = -Infinity;
+  let match: RegExpExecArray | null;
+
+  while ((match = sectionTag.exec(html)) !== null) {
+    const tag = match[0];
+    const idx = match.index;
+    const styleMatch = tag.match(/style\s*=\s*(['"])([\s\S]*?)\1/i);
+    const style = (styleMatch?.[2] || '').toLowerCase();
+    const after = html.slice(idx, idx + 800).toLowerCase();
+    const tailLen = html.length - idx;
+
+    let score = 0;
+    if (style.includes('font-size')) score += 2;
+    if (style.includes('line-height')) score += 2;
+    if (style.includes('font-family')) score += 3;
+    if (style.includes('color')) score += 1;
+    if (style.includes('background')) score += 1;
+    if (tailLen > 1200) score += 2;
+    if (after.includes('wait, the prompt says') || after.includes('-> check')) score -= 10;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestStart = idx;
+    }
+  }
+
+  if (bestStart >= 0) {
+    html = html.slice(bestStart).trim();
+  } else {
+    const fallbackStart = html.search(/<(section|p|h1|h2|h3|blockquote|ul|ol)\b/i);
+    if (fallbackStart > 0) {
+      html = html.slice(fallbackStart).trim();
+    }
+  }
+
+  // Remove trailing explanatory text after the actual HTML.
+  const lastClose = Math.max(
+    html.lastIndexOf('</section>'),
+    html.lastIndexOf('</p>'),
+    html.lastIndexOf('</ul>'),
+    html.lastIndexOf('</ol>'),
+    html.lastIndexOf('</blockquote>')
+  );
+  if (lastClose > 0) {
+    const endTag =
+      html.slice(lastClose).startsWith('</section>') ? '</section>' :
+      html.slice(lastClose).startsWith('</p>') ? '</p>' :
+      html.slice(lastClose).startsWith('</ul>') ? '</ul>' :
+      html.slice(lastClose).startsWith('</ol>') ? '</ol>' :
+      '</blockquote>';
+    html = html.slice(0, lastClose + endTag.length).trim();
+  }
+
+  return html;
+}
+
 function shouldPromoteToRedSubheading(title: string): boolean {
   const compact = title.replace(/\s+/g, '').trim();
   if (compact.length < 2 || compact.length > 18) return false;
@@ -767,7 +837,9 @@ export const formatText = async (text: string, style: StyleType): Promise<string
 
     if (!combined) return "<p>Format generation failed.</p>";
     // Strip the sentinel before returning
-    const result = combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim();
+    const result = sanitizeFormatterHtml(
+      combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim()
+    );
     if (style === StyleType.RED_INSIGHT_LITE) {
       return postProcessRedInsightHtml(result);
     }
@@ -937,7 +1009,9 @@ CRITICAL RULES:
   }
 
   if (!combined) return '<p>Format generation failed.</p>';
-  return combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim();
+  return sanitizeFormatterHtml(
+    combined.replace(/<!--\s*END_OF_ARTICLE\s*-->/g, '').trim()
+  );
 };
 
 /**
