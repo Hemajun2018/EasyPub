@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
 const EVOLINK_BASE = 'https://api.evolink.ai/v1beta';
-const DEFAULT_FORMATTER_MODEL = 'gemini-3-flash-preview';
+const DEFAULT_FORMATTER_MODEL = 'gemini-2.5-flash';
 
 async function fetchWithTimeout(
   url: string,

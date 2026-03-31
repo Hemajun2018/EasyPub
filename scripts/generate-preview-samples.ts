@@ -24,7 +24,7 @@ if (!apiKey) {
   console.error('❌ Error: EVOLINK_API_KEY or API_KEY not found in environment variables');
   process.exit(1);
 }
-const formatterModel = process.env.FORMATTER_GEMINI_MODEL || 'gemini-3-flash-preview';
+const formatterModel = process.env.FORMATTER_GEMINI_MODEL || 'gemini-2.5-flash';
 
 const EVOLINK_BASE = 'https://api.evolink.ai/v1beta';
 
